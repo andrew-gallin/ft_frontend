@@ -4,9 +4,9 @@ const graphqlHttp = require('express-graphql')
 const { buildSchema } = require('graphql')
 const mongoose = require('mongoose')
 
-const app = express();
+const Lesson = require('./models/lessons.js')
 
-const lessons = [];
+const app = express();
 
 //use bodyParser.json() if not on most current version of express
 app.use(express.json())
@@ -48,21 +48,31 @@ app.use('/graphql', graphqlHttp({
   `),
   rootValue: {
     lessons: () => {
-      return lessons
+      return Lesson.find().then(lessons => {
+        return lessons.map(lesson => {
+          return { ...lesson._doc, _id: lesson._doc._id.toString()};
+        })
+      }).catch(err =>{
+        throw err
+      })
     },
     createLesson: (args) => {
-      const lesson = {
-        _id:  Math.random().toString(),
+      const lesson = new Lesson({
         title: args.lessonInput.title,
         author: args.lessonInput.author,
         description: args.lessonInput.description,
         language: args.lessonInput.language,
         difficulty: args.lessonInput.difficulty,
-        createdOn: new Date().toISOString()
-      };
-      lessons.push(lesson);
-      console.log(lessons)
+        createdOn: new Date()
+      })
       return lesson
+        .save()
+        .then(result =>{
+          return {...result._doc, _id: lesson._doc._id.toString()};
+      }).catch(err => {
+        console.log(err)
+        throw err
+      });
     }
   },
   graphiql: true
