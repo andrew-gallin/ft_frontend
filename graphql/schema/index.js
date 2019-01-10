@@ -1,8 +1,15 @@
 const { buildSchema } = require('graphql')
 
 //TODO: Author should become a user at somepoint or use user ID more likely
-
 module.exports = buildSchema(`
+  type CompletedLesson{
+    _id: ID!
+    lesson: Lesson!
+    user: User!
+    createdAt: String!
+    updatedAt: String!
+  }
+
   type Lesson{
     _id: ID!
     title: String!
@@ -38,11 +45,15 @@ module.exports = buildSchema(`
 
   type RootQuery {
     lessons: [Lesson!]!
+    completedLessons: [CompletedLesson!]
+    users: [User!]
   }
 
   type RootMutation {
     createLesson(lessonInput: LessonInput) : Lesson
     createUser(userInput: UserInput) : User
+    completeLesson(lessonId: ID) : CompletedLesson
+    resetCompletedLesson(completeLessonId: ID) : Lesson
   }
 
   schema{
