@@ -28,6 +28,12 @@ module.exports = buildSchema(`
     createdLessons: [Lesson!]
   }
 
+  type AuthData{
+    userId: ID!
+    token: String!
+    tokenExpiration: Int!
+  }
+
   input UserInput{
     username: String!
     email: String!
@@ -47,6 +53,7 @@ module.exports = buildSchema(`
     lessons: [Lesson!]!
     completedLessons: [CompletedLesson!]
     users: [User!]
+    login(email: String!, password: String!): AuthData!
   }
 
   type RootMutation {

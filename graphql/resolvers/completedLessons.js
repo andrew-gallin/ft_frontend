@@ -3,7 +3,10 @@ const CompletedLesson = require('../../models/completedLesson.js')
 const { transformLesson, transformCompletedLesson } = require('./merge.js')
 
 module.exports = {
-  completedLessons: async () => {
+  completedLessons: async (args, req) => {
+    if (!req.isAuth){
+      throw new Error('Unauthenticated')
+    }
     try{
       const completedLessons = await CompletedLesson.find()
       return completedLessons.map(completedLesson => {
@@ -13,12 +16,15 @@ module.exports = {
       throw err;
     }
   },
-  completeLesson: async (args) => {
+  completeLesson: async (args, req) => {
+    if (!req.isAuth){
+      throw new Error('Unauthenticated')
+    }
     try {
       //if a user has already engaged with a lesson we should update that record
       const fetchedLesson = await Lesson.findOne({_id: args.lessonId})
       const completeLesson = new CompletedLesson({
-        user:'5c324ab59a7bb9c27c3f8eda',
+        user:req.userId,
         lesson: fetchedLesson
       })
       const result = await completeLesson.save()
@@ -27,7 +33,10 @@ module.exports = {
       throw e
     }
   },
-  resetCompletedLesson: async (args) => {
+  resetCompletedLesson: async (args, req) => {
+    if (!req.isAuth){
+      throw new Error('Unauthenticated')
+    }
     try {
       const fetchedCompletedLesson = await CompletedLesson.findById(args.completeLessonId).populate('lesson')
       const lesson = transformLesson(fetchedCompletedLesson.lesson)
