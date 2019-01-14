@@ -20,7 +20,7 @@ app.use('/graphql', graphqlHttp({
 }));
 
 mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds247674.mlab.com:47674/fluenttruant`).then(() => {
-  app.listen(3000);
+  app.listen(8000);
 }).catch((err) => {
   console.log(err);
 });
