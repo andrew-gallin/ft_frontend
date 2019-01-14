@@ -11,6 +11,17 @@ const app = express();
 //use bodyParser.json() if not on most current version of express
 app.use(express.json())
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  //Verifies to browser service accepts requests even though Graphql doesn't handle Options
+  if (req.method === 'OPTIONS'){
+    return res.sendStatus(200);
+  }
+  next();
+})
+
 app.use(isAuth)
 
 app.use('/graphql', graphqlHttp({

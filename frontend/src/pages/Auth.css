@@ -35,3 +35,7 @@
   background: #3c9140;
   border-color: #3c9140;
 }
+
+#username-hidden{
+  display: none;
+}
