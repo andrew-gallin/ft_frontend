@@ -10,13 +10,12 @@ class LessonsPage extends Component {
   
     this.state = {
        lessons:[],
-       isLoading: false
+       isLoading: false,
+       error: null
     }
   }
 
-
-
-  componentDidMount(){
+  async componentDidMount(){
     this.setState({isLoading: true})
     let requestBody = {
       query: `
@@ -31,28 +30,31 @@ class LessonsPage extends Component {
     }
 
     //send to the backend
-    fetch(backendURL, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    }).then(res => {
+    try{
+      let res = await fetch(backendURL, {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      })
       if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
-      }
-      return res.json();
-    })
-    .then(resData => {
+          throw new Error('Failed!')
+        }
+      let resData = await res.json();
       this.setState({lessons: resData.data.lessons, isLoading:false})
-    })
-    .catch(err => {
+    }catch(err) {
       console.log(err)
-    })
+      this.setState({ error: err, isLoading:false})
+    }
   }
 
   render(){
-    const { lessons, isLoading } = this.state;
+    const { lessons, isLoading, error } = this.state;
+    if(error){
+      return <p>{error.message}</p>;
+    }
+    
     if (isLoading) {
       return <p>Loading ...</p>;
     }
