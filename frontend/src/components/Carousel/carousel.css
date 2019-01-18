@@ -1,0 +1,7 @@
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'; 
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css';
+
+.carousel-inner > .item > img {
+    margin: 0 auto;
+    /* height:none */
+}

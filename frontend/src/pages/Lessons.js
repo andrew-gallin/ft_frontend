@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import SimpleSlider from '../components/Carousel/Carousel'
+
+import '../components/Carousel/carousel.css';
+
 const backendURL = 'http://localhost:8000/graphql'
 
 
@@ -59,10 +63,10 @@ class LessonsPage extends Component {
       return <p>Loading ...</p>;
     }
 
-
     return (
-    <div>
+    <div className="lesson-page">
     <h1>The Lessons Page</h1>
+    <SimpleSlider />
       <ul>
         {lessons.map(lesson =>
           <li>
