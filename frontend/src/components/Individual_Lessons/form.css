@@ -1,0 +1,48 @@
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'; 
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css';
+
+
+.form-group{
+    width: 40%;
+    display: inline-block;
+}
+
+.item,
+.lesson-el-form{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.lesson-el-form{
+    height: 100%;
+    padding-bottom: 10rem;
+}
+
+.prompt,
+.answer{
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+}
+.lesson-el-form > *{
+    margin-bottom: 20px;
+}
+
+.prompt{
+    margin-left: -3.5rem;
+}
+.answer{
+    margin-left: -5rem;
+}
+
+.lesson-el-form input{
+    margin-left: 20px;
+}
+
+.incorrect-answer{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}

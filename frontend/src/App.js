@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 import AuthPage from './pages/Auth';
 import LessonsPage from './pages/Lessons';
 import CreateLessonPage from './pages/CreateLesson';
+import CreateTextLesson from './pages/CreateTextLesson';
 import MainNavigation from './components/Navigation/MainNavigation'
 import AuthContext from './context/auth-context'
 
@@ -44,6 +45,7 @@ class App extends Component {
                 {!this.state.token && <Route path ="/auth" component={AuthPage} />}
                 <Route path ="/lessons" component={LessonsPage} />
                 <Route path ="/create-lesson" component={CreateLessonPage} />
+                <Route path ="/text-lesson" component={CreateTextLesson} />
               </Switch>
             </main>
           </AuthContext.Provider>

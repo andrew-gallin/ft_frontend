@@ -20,11 +20,14 @@ const mainNavigation = props => (
             </li>
             )}
             <li><NavLink to="/lessons">Lessons</NavLink></li>
-            {context.token && (
+            {!context.token && (
             <li>
               <NavLink to="/create-lesson">Create Lessons</NavLink>
             </li>
             )}
+            <li>
+              <NavLink to="/text-lesson">Text Lessons</NavLink>
+            </li>
           </ul>
         </nav>
       </header>
