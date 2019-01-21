@@ -3,8 +3,9 @@
 
 
 .form-group{
-    width: 40%;
+    width: 25%;
     display: inline-block;
+    text-align: center;
 }
 
 .item,
@@ -17,7 +18,9 @@
 
 .lesson-el-form{
     height: 100%;
-    padding-bottom: 10rem;
+    padding-bottom: 7rem;
+    padding-top: 7rem;
+    background: gray;
 }
 
 .prompt,
@@ -45,4 +48,20 @@
     display: flex;
     flex-direction: column;
     text-align: center;
+}
+
+.add-lesson-button{
+    position: absolute;
+    left: auto;
+}
+
+.glyphicon-plus{
+    top: 45%;
+    font-size: 150%;
+}
+
+.submit_question{
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
 }

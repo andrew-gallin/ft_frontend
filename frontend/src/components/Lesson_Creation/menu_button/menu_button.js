@@ -168,7 +168,7 @@ const MenuItems = ({
     };
 
     return (
-      <a href="lessons">
+      <a href="text-lesson">
         <div
           className={item.show
             ? "menu-item item-show"

@@ -3,6 +3,7 @@ import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import './form.css'
 
 import { Carousel } from 'react-bootstrap';
+import Text_Question from './text_template/text_question'
 
 
 export default class LessonForm extends Component {
@@ -12,7 +13,8 @@ export default class LessonForm extends Component {
         this.handleChange = this.handleChange.bind(this);
 
         this.state = {
-            value: ''
+            value: '',
+            questions:[]
         };
     }
 
@@ -31,7 +33,10 @@ export default class LessonForm extends Component {
             {' '}
             <FormGroup controlId="formLessonHeader">
                 <ControlLabel>Lesson Language</ControlLabel>
-                <FormControl type="text" placeholder="My Lesson" />      
+                <FormControl componentClass="select" placeholder="select">
+                    <option value="Portuguese">Portuguese</option>
+                    <option value="English">English</option>
+                </FormControl>
             </FormGroup>
             {' '}
             <FormGroup controlId="formControlsSelect">
@@ -43,88 +48,97 @@ export default class LessonForm extends Component {
                 </FormControl>
             </FormGroup>
 
-            <LessonCreator />
-
             <Button type="submit">Finalize Lesson</Button>
         </form>
+        <LessonCreator></LessonCreator>
       </div>
     )
   }
 }
-
 
 class LessonCreator extends Component {
     constructor(props, context) {
         super(props, context);
     
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     
         this.state = {
           index: 0,
           direction: null,
-          wrap:false
+          lessons: []
         };
       }
-    
+
+      componentDidMount(){
+          this.setState({lessons: [{}]})
+      }
+
+      handleSubmit(event){
+        event.preventDefault();
+        //Gathers form data and builds object where values are arrays if the field names are shared b/w multiple values
+        // otherwise it is 1:1 k:v
+        const data = new FormData(event.target);
+
+        let lesson = {}
+        let keys = new Set()
+        for (let key of data.keys()){
+            keys.add(key);
+        }
+        for (let key of keys){
+            let value = data.getAll(key)
+            value.length > 1 ? lesson[key] = value : lesson[key] = value[0]
+        }
+        let lessons = this.state.lessons
+        lessons[this.state.index] = lesson
+        
+        this.setState(
+            {
+                lessons: lessons,
+                end: false
+            }
+        );
+        
+      }
+
       handleSelect(selectedIndex, e) {
+          console.log(selectedIndex, this.state.lessons.length);
+          let index = selectedIndex
+          let addLesson = false
+          if(this.state.index + 1 === this.state.lessons.length && e.direction === 'next'){
+            index = this.state.index
+            addLesson = true
+          }
+          
         this.setState({
-          index: selectedIndex,
-          direction: e.direction
+          index: index,
+          direction: e.direction,
+          lessons: addLesson ? this.state.lessons.concat([{}]) : this.state.lessons
         });
       }
 
 
   render() {
-    const { index, direction, wrap } = this.state;
+    const { index, direction, lessons } = this.state;
+    console.log(lessons)
+    let nextIcon = <span className="glyphicon glyphicon-chevron-right"></span>
+    if(index === lessons.length-1){
+        nextIcon =<span className="glyphicon glyphicon-plus"></span>
+    }
     return (
       <div>
           <Carousel
           activeIndex={index}
           direction={direction}
           onSelect={this.handleSelect}
-          wrap={wrap}
           //Next Icon should programatically be a + if at the end of the lesson
-          nextIcon=<span className="glyphicon glyphicon-chevron-right"></span>
+          nextIcon ={nextIcon}
           >
-            <Carousel.Item >
-                <div className="lesson-el-form">
-                    <div className="prompt">
-                        <label htmlFor="word">Word:</label>
-                        <input type="text" id="word" name="question_word"></input>
-                    </div>
-                    <div className="answer">
-                        <label htmlFor="answer">Answer:</label>
-                        <input type="text" id="answer" name="answer_word"></input>
-                    </div>
-                    <div className="incorrect-answer">
-                        <label htmlFor="incorrect_answer_1">Incorrect Answer 1:</label>
-                        <input type="text" id="incorrect_answer_1" name="incorrect_answer_1"></input>
-                    </div>
-                    <div className="incorrect-answer">
-                        <label htmlFor="incorrect_answer_2">Incorrect Answer 2:</label>
-                        <input type="text" id="incorrect_answer_2" name="incorrect_answer_2"></input>
-                    </div>
-                    <div className="incorrect-answer">
-                        <label htmlFor="incorrect_answer_3">Incorrect Answer 3:</label>
-                        <input type="text" id="incorrect_answer_3" name="incorrect_answer_3"></input>
-                    </div>
-                </div>
-            </Carousel.Item>
-            <Carousel.Item >
-                <div className="lesson-el-form">
-                    <label htmlFor="word">Word:   </label>
-                    <input type="text" id="word" name="question_word"></input>
-                    <label htmlFor="answer">Answer:     </label>
-                    <input type="text" id="answer" name="answer_word"></input>
-                    <label htmlFor="incorrect_answer_1">Incorrect Answer 1:</label>
-                    <input type="text" id="incorrect_answer_1" name="incorrect_answer_1"></input>
-                    <label htmlFor="incorrect_answer_2">Incorrect Answer 2:</label>
-                    <input type="text" id="incorrect_answer_2" name="incorrect_answer_2"></input>
-                    <label htmlFor="incorrect_answer_3">Incorrect Answer 3:</label>
-                    <input type="text" id="incorrect_answer_3" name="incorrect_answer_3"></input>
-                </div>
-            </Carousel.Item>
-              
+            {lessons.map(lesson => (
+                <Carousel.Item >
+                    <Text_Question handleSubmit={this.handleSubmit} />
+                </Carousel.Item>
+            ))}              
           </Carousel>
         
       </div>

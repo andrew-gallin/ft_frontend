@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 
-import SimpleSlider from '../components/Carousel/Carousel'
-
+import Carousel from '../components/Carousel/Carousel'
 import '../components/Carousel/carousel.css';
 
 const backendURL = 'http://localhost:8000/graphql'
-
-
 
 class LessonsPage extends Component {
   constructor(props) {
@@ -66,7 +63,7 @@ class LessonsPage extends Component {
     return (
     <div className="lesson-page">
     <h1>The Lessons Page</h1>
-    <SimpleSlider />
+    <Carousel />
       <ul>
         {lessons.map(lesson =>
           <li>
