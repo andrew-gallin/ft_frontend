@@ -9,7 +9,8 @@
 }
 
 .item,
-.lesson-el-form{
+.lesson-el-form,
+.header_form{
     display: flex;
     flex-wrap: wrap;
     align-items: center;

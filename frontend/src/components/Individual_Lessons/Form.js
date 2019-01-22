@@ -3,7 +3,9 @@ import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import './form.css'
 
 import { Carousel } from 'react-bootstrap';
-import Text_Question from './text_template/text_question'
+import textQuestion from './text_template/text_question'
+
+const backendURL = 'http://localhost:8000/graphql'
 
 
 export default class LessonForm extends Component {
@@ -11,6 +13,8 @@ export default class LessonForm extends Component {
         super(props, context);
 
         this.handleChange = this.handleChange.bind(this);
+        this.updateQuestions = this.updateQuestions.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
             value: '',
@@ -22,18 +26,91 @@ export default class LessonForm extends Component {
         this.setState({ value: e.target.value });
       }
     
+    updateQuestions(questions){
+        this.setState({
+            questions: questions
+        })        
+    }
+
+    handleSubmit(event){
+        event.preventDefault();
+        //Gathers form data and builds object where values are arrays if the field names are shared b/w multiple values
+        // otherwise it is 1:1 k:v
+        const data = new FormData(event.target);
+
+        let lesson = {questions: this.state.questions}
+        let keys = new Set()
+        for (let key of data.keys()){
+            keys.add(key);
+        }
+        for (let key of keys){
+            let value = data.getAll(key)
+            value.length > 1 ? lesson[key] = value : lesson[key] = value[0]
+        }
+        console.log(lesson)
+
+        // let requestBody = {
+        //     query: `
+        //       mutation {
+        //         login(email: "${email}", password: "${password}"){
+        //           userId
+        //           token
+        //           tokenExpiration
+        //         }
+        //       }
+        //     `
+        //   }
+      
+        //   if (!this.state.isLogin) {
+        //     requestBody ={
+        //        query: `
+        //          mutation{
+        //            createUser(userInput:{email: "${email}", username: "${username}", password: "${password}"}){
+        //              _id
+        //              email
+        //            }
+        //          }
+        //        `
+        //      }
+        //   }
+      
+        //   //send to the backend
+        //   fetch(backendURL, {
+        //     method: 'POST',
+        //     body: JSON.stringify(requestBody),
+        //     headers:{
+        //       'Content-Type': 'application/json'
+        //     }
+        //   }).then(res => {
+        //     if (res.status !== 200 && res.status !== 201) {
+        //       throw new Error('Failed!')
+        //     }
+        //     return res.json();
+        //   })
+        //   .then(resData => {
+        //     if(resData.data.login.token){
+        //       this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration)
+        //     }
+        //   })
+        //   .catch(err => {
+        //     console.log(err)
+        //   })
+        
+      }
+    
   render() {
     return (
+        //TODO: Refactor this form to allow for different headers for different lesson types
       <div>
-        <form>
+        <form className="header_form" onSubmit={this.handleSubmit}>
             <FormGroup controlId="formLessonTitle">
                 <ControlLabel>Lesson Title</ControlLabel>
-                <FormControl type="text" placeholder="My Lesson" />      
+                <FormControl type="text" name="title" placeholder="My Lesson" />      
             </FormGroup>
             {' '}
             <FormGroup controlId="formLessonHeader">
                 <ControlLabel>Lesson Language</ControlLabel>
-                <FormControl componentClass="select" placeholder="select">
+                <FormControl componentClass="select" name="language" placeholder="select">
                     <option value="Portuguese">Portuguese</option>
                     <option value="English">English</option>
                 </FormControl>
@@ -41,7 +118,7 @@ export default class LessonForm extends Component {
             {' '}
             <FormGroup controlId="formControlsSelect">
                 <ControlLabel>Difficulty</ControlLabel>
-                <FormControl componentClass="select" placeholder="select">
+                <FormControl componentClass="select" name="difficulty" placeholder="select">
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
                     <option value="Advanced">Advanced</option>
@@ -50,7 +127,7 @@ export default class LessonForm extends Component {
 
             <Button type="submit">Finalize Lesson</Button>
         </form>
-        <LessonCreator></LessonCreator>
+        <LessonCreator updateQuestions={this.updateQuestions}></LessonCreator>
       </div>
     )
   }
@@ -66,12 +143,12 @@ class LessonCreator extends Component {
         this.state = {
           index: 0,
           direction: null,
-          lessons: []
+          questions: []
         };
       }
 
       componentDidMount(){
-          this.setState({lessons: [{}]})
+          this.setState({questions: [{}]})
       }
 
       handleSubmit(event){
@@ -89,23 +166,22 @@ class LessonCreator extends Component {
             let value = data.getAll(key)
             value.length > 1 ? lesson[key] = value : lesson[key] = value[0]
         }
-        let lessons = this.state.lessons
-        lessons[this.state.index] = lesson
+        let questions = this.state.questions
+        questions[this.state.index] = lesson
         
         this.setState(
             {
-                lessons: lessons,
+                questions: questions,
                 end: false
             }
         );
-        
+        this.props.updateQuestions(questions)
       }
 
       handleSelect(selectedIndex, e) {
-          console.log(selectedIndex, this.state.lessons.length);
           let index = selectedIndex
           let addLesson = false
-          if(this.state.index + 1 === this.state.lessons.length && e.direction === 'next'){
+          if(this.state.index + 1 === this.state.questions.length && e.direction === 'next'){
             index = this.state.index
             addLesson = true
           }
@@ -113,16 +189,15 @@ class LessonCreator extends Component {
         this.setState({
           index: index,
           direction: e.direction,
-          lessons: addLesson ? this.state.lessons.concat([{}]) : this.state.lessons
+          questions: addLesson ? this.state.questions.concat([{}]) : this.state.questions
         });
       }
 
-
   render() {
-    const { index, direction, lessons } = this.state;
-    console.log(lessons)
+    const { index, direction, questions } = this.state;
     let nextIcon = <span className="glyphicon glyphicon-chevron-right"></span>
-    if(index === lessons.length-1){
+    //Next Icon is a + if at the end of the lesson
+    if(index === questions.length-1){
         nextIcon =<span className="glyphicon glyphicon-plus"></span>
     }
     return (
@@ -131,12 +206,11 @@ class LessonCreator extends Component {
           activeIndex={index}
           direction={direction}
           onSelect={this.handleSelect}
-          //Next Icon should programatically be a + if at the end of the lesson
           nextIcon ={nextIcon}
           >
-            {lessons.map(lesson => (
+            {questions.map(lesson => (
                 <Carousel.Item >
-                    <Text_Question handleSubmit={this.handleSubmit} />
+                    <textQuestion handleSubmit={this.handleSubmit} />
                 </Carousel.Item>
             ))}              
           </Carousel>

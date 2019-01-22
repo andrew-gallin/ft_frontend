@@ -2,17 +2,24 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const lessonSchema = new Schema({
-	title: {
-		type: String,
-		required: true
-	},
+const questionSchema = new Schema({
 	author: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',
 		required: true
 	},
-	description: {
+	prompt: {
+		type: String,
+		required: true
+	},
+	answer: {
+		type: String,
+		required: true
+	},
+	incorrectAnswers: [{
+		type: String,
+	}],
+	type: {
 		type: String,
 		required: true
 	},
@@ -20,6 +27,9 @@ const lessonSchema = new Schema({
 		type: String,
 		required: true
 	},
+	tags: [{
+		type: String,
+	}],
 	difficulty: {
 		type: Number,
 		required: true
@@ -31,4 +41,4 @@ const lessonSchema = new Schema({
 });
 
 
-module.exports = mongoose.model('Lesson', lessonSchema);
+module.exports = mongoose.model('Question', questionSchema);

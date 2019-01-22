@@ -15,9 +15,9 @@ module.exports = {
     })
   },
   createLesson: async (args, req) => {
-    if (!req.isAuth){
-      throw new Error('Unauthenticated')
-    }
+    // if (!req.isAuth){
+    //   throw new Error('Unauthenticated')
+    // }
     const lesson = new Lesson({
       title: args.lessonInput.title,
       author: req.userId,

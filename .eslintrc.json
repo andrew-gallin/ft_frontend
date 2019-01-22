@@ -7,9 +7,11 @@
     "extends": "eslint:recommended",
     "parserOptions": {
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": true,
+            "experimentalObjectRestSpread": true
+
         },
-        "ecmaVersion": 2015,
+        "ecmaVersion": 2017,
         "sourceType": "module"
     },
     "plugins": [
@@ -30,7 +32,7 @@
         ],
         "semi": [
             "error",
-            "always"
+            "true"
         ]
     }
 }

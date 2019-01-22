@@ -43,6 +43,15 @@ const transformLesson = lesson => {
   }
 }
 
+const transformQuestion = question => {
+  return {
+    ...question._doc,
+    _id:question.id,
+    createdOn: dateToString(question._doc.createdOn),
+    author: user.bind(this, question.author)
+  }
+}
+
 const transformCompletedLesson = completedLesson => {
   return {
     ...completedLesson._doc,

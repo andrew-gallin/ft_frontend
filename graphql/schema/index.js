@@ -1,4 +1,4 @@
-const { buildSchema } = require('graphql')
+const { buildSchema } = require('graphql');
 
 //TODO: Author should become a user at somepoint or use user ID more likely
 module.exports = buildSchema(`
@@ -18,6 +18,16 @@ module.exports = buildSchema(`
     language: String!
     difficulty: Int!
     createdOn: String!
+    questions: [Question!]!
+  }
+
+  type Question{
+    _id: ID!
+    prompt: String!
+    answer: String!
+    incorrectAnswers: [String]
+    author: User!
+    lessons: [Lesson!]!
   }
 
   type User {
@@ -26,6 +36,7 @@ module.exports = buildSchema(`
     email: String!
     password: String
     createdLessons: [Lesson!]
+    createdQuestions: [Question!]
   }
 
   type AuthData{
@@ -37,7 +48,7 @@ module.exports = buildSchema(`
   input UserInput{
     username: String!
     email: String!
-    password: String
+    password: String!
   }
 
   input LessonInput {
@@ -47,6 +58,16 @@ module.exports = buildSchema(`
     language: String!
     difficulty: Int!
     createdOn: String!
+    questions: [QuestionInput!]!
+  }
+
+  input QuestionInput {
+    _id: ID!
+    prompt: String!
+    answer: String!
+    incorrectAnswers: [String]
+    author: String!
+    lesson: String!
   }
 
   type RootQuery {
@@ -58,6 +79,7 @@ module.exports = buildSchema(`
 
   type RootMutation {
     createLesson(lessonInput: LessonInput) : Lesson
+    createQuestion(questionInput: questionInput) : Question
     createUser(userInput: UserInput) : User
     completeLesson(lessonId: ID) : CompletedLesson
     resetCompletedLesson(completeLessonId: ID) : Lesson
@@ -67,4 +89,4 @@ module.exports = buildSchema(`
     query: RootQuery
     mutation: RootMutation
   }
-`)
+`);
