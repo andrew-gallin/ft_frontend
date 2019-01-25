@@ -2,6 +2,9 @@ const Lesson = require('../../models/lessons.js')
 const { transformLesson } = require('./merge')
 const User = require('../../models/users');
 
+// const mongoose = require('mongoose')
+// const ObjectId = mongoose.Types.ObjectId;
+
 module.exports = {
 	lessons: () => {
 		return Lesson.find()
@@ -20,17 +23,21 @@ module.exports = {
 		// }
 		const lesson = new Lesson({
 			title: args.lessonInput.title,
-			author: req.userId,
+			author: "5c324ab59a7bb9c27c3f8eda", ///req.userId,
 			description: args.lessonInput.description,
-			language: args.lessonInput.language,
+			promptLanguage: args.lessonInput.promptLanguage,
+			answerLanguage: args.lessonInput.answerLanguage,
 			difficulty: args.lessonInput.difficulty,
+			questions: args.lessonInput.questions,
 			createdOn: new Date()
 		})
 		let createdLesson;
 		try {
 			const result = await lesson.save()
 			createdLesson = transformLesson(result);
-			const author = await User.findById(req.userId)
+			console.log(createdLesson);
+			
+			const author = await User.findById("5c324ab59a7bb9c27c3f8eda")//req.userId)
 			if (!author) {
 				throw new Error('User not found')
 			}

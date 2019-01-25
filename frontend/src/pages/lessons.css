@@ -1,0 +1,9 @@
+.grid-item{
+    text-align: center;
+    font-size: 3em;
+}
+
+.lesson-button{
+    min-width: 15em;
+    font-size: 1.25rem;
+}

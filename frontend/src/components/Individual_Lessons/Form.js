@@ -3,16 +3,28 @@ import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import './form.css'
 
 import { Carousel } from 'react-bootstrap';
-import textQuestion from './text_template/text_question'
+import TextQuestion from './text_template/text_question'
 
-const backendURL = 'http://localhost:8000/graphql'
+const { backendMutation } = require('../../helpers/backendMutation')
+const { requestBodyBuilder } = require('../../helpers/requestBodyBuilder')
 
+const difficulty_map ={
+    'Beginner': 0,
+    'Intermediate' : 1,
+    'Advanced': 2
+}
+
+const placeholderQuestion ={
+    prompt: '',
+    answer: '',
+    incorrect_answers: ['', '', '']
+
+}
 
 export default class LessonForm extends Component {
     constructor(props, context) {
         super(props, context);
 
-        this.handleChange = this.handleChange.bind(this);
         this.updateQuestions = this.updateQuestions.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -22,17 +34,13 @@ export default class LessonForm extends Component {
         };
     }
 
-    handleChange(e) {
-        this.setState({ value: e.target.value });
-      }
-    
     updateQuestions(questions){
         this.setState({
             questions: questions
         })        
     }
 
-    handleSubmit(event){
+    async handleSubmit(event){
         event.preventDefault();
         //Gathers form data and builds object where values are arrays if the field names are shared b/w multiple values
         // otherwise it is 1:1 k:v
@@ -47,56 +55,45 @@ export default class LessonForm extends Component {
             let value = data.getAll(key)
             value.length > 1 ? lesson[key] = value : lesson[key] = value[0]
         }
-        console.log(lesson)
+        lesson.difficulty = difficulty_map[lesson.difficulty];
 
-        //TODO: Hit the Question API repeatedly (is there a way to just have the endpoint expect an array) and store the
+        //TODO: Hit the Question API repeatedly (is there a way to just have the endpoint expect an array) and store the idValues of the newly created questions
+        let question_Ids = []
+        for (let question of lesson.questions){
+            let { prompt, answer, incorrect_answers} = question;
+            let requestBodyObj = {
+                prompt: prompt,
+                answer: answer,
+                prompt_language: lesson.language,
+                incorrect_answers_string: incorrect_answers.join('", "'),
+                response_language: 'English', //this should somehow come from user metadata, mor advance this can come from language detection
+                difficulty: lesson.difficulty,
+                type: 'text' ///this needs to come from page metadata
+            }
+          
+            //need to test for presence of values FORM VALIDATION
+            let requestBody = requestBodyBuilder(requestBodyObj, 'createQuestion')
 
-        // let requestBody = {
-        //     query: `
-        //       mutation {
-        //         login(email: "${email}", password: "${password}"){
-        //           userId
-        //           token
-        //           tokenExpiration
-        //         }
-        //       }
-        //     `
-        //   }
-      
-        //   if (!this.state.isLogin) {
-        //     requestBody ={
-        //        query: `
-        //          mutation{
-        //            createUser(userInput:{email: "${email}", username: "${username}", password: "${password}"}){
-        //              _id
-        //              email
-        //            }
-        //          }
-        //        `
-        //      }
-        //   }
-      
-        //   //send to the backend
-        //   fetch(backendURL, {
-        //     method: 'POST',
-        //     body: JSON.stringify(requestBody),
-        //     headers:{
-        //       'Content-Type': 'application/json'
-        //     }
-        //   }).then(res => {
-        //     if (res.status !== 200 && res.status !== 201) {
-        //       throw new Error('Failed!')
-        //     }
-        //     return res.json();
-        //   })
-        //   .then(resData => {
-        //     if(resData.data.login.token){
-        //       this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration)
-        //     }
-        //   })
-        //   .catch(err => {
-        //     console.log(err)
-        //   })
+            try{
+                let resData = await backendMutation(requestBody);
+                question_Ids.push(resData.data.createQuestion._id)
+            }catch (err){
+                throw new Error(err)
+            }
+
+        }           
+        let requestBodyObj ={
+            lesson: lesson,
+            question_Ids: question_Ids
+        }
+        let requestBody = requestBodyBuilder(requestBodyObj, 'createLesson')
+            
+            try{
+                let resData = await backendMutation(requestBody);
+                console.log(resData);
+            }catch (err){
+                throw new Error(err)
+            }
         
       }
     
@@ -210,9 +207,9 @@ class LessonCreator extends Component {
           onSelect={this.handleSelect}
           nextIcon ={nextIcon}
           >
-            {questions.map(lesson => (
-                <Carousel.Item >
-                    <textQuestion handleSubmit={this.handleSubmit} />
+            {questions.map(question => (
+                <Carousel.Item key={question.prompt || 1}>
+                    <TextQuestion handleSubmit={this.handleSubmit} question={question.prompt === undefined ? placeholderQuestion : question} />
                 </Carousel.Item>
             ))}              
           </Carousel>

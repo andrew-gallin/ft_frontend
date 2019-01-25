@@ -23,7 +23,11 @@ const questionSchema = new Schema({
 		type: String,
 		required: true
 	},
-	language: {
+	promptLanguage: {
+		type: String,
+		required: true
+	},
+	responseLanguage: {
 		type: String,
 		required: true
 	},
@@ -39,6 +43,5 @@ const questionSchema = new Schema({
 		required: true
 	}
 });
-
 
 module.exports = mongoose.model('Question', questionSchema);

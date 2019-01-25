@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import './menu_button.css'
 
 // example click handler for menu items
-const itemClick = (e) => {
-  console.log("clicked");
-}
+const itemClick = (e) => {}
 
 // config for menu -- Make this an input prop
 const menuData = [
@@ -168,15 +166,17 @@ const MenuItems = ({
     };
 
     return (
-      <a href="text-lesson">
+      <a href="text-lesson" key={item.icon}>
         <div
           className={item.show
             ? "menu-item item-show"
             : "menu-item item-hide"}
           style={styling}
           onClick={item.click}
+          key={item.icon}
         >
           <i className={"fa " + item.icon}
+            key={item.icon}
             aria-hidden="true"
           ></i>
         </div>

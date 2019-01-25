@@ -16,7 +16,11 @@ const lessonSchema = new Schema({
 		type: String,
 		required: true
 	},
-	language: {
+	promptLanguage: {
+		type: String,
+		required: true
+	},
+	answerLanguage: {
 		type: String,
 		required: true
 	},
@@ -24,6 +28,11 @@ const lessonSchema = new Schema({
 		type: Number,
 		required: true
 	},
+	questions:[{
+		type:Schema.Types.ObjectId,
+		ref: 'Question',
+		required: true
+	}],
 	createdOn: {
 		type: Date,
 		required: true

@@ -15,7 +15,9 @@ module.exports = buildSchema(`
     title: String!
     author: User!
     description: String!
-    language: String!
+    promptLanguage: String
+    answerLanguage: String
+    language: String
     difficulty: Int!
     createdOn: String!
     questions: [Question!]!
@@ -55,19 +57,23 @@ module.exports = buildSchema(`
     title: String!
     author: String!
     description: String!
-    language: String!
+    promptLanguage: String!
+    answerLanguage: String!
     difficulty: Int!
-    createdOn: String!
-    questions: [QuestionInput!]!
+    questions: [String!]!
   }
 
   input QuestionInput {
-    _id: ID!
+    author: String!
     prompt: String!
     answer: String!
-    incorrectAnswers: [String]
-    author: String!
-    lesson: String!
+    incorrectAnswers: [String!]
+    promptLanguage:String!
+    responseLanguage:String!
+    type:String!
+    difficulty: Int!
+    tags: [String!]
+    lesson: String
   }
 
   type RootQuery {
@@ -79,7 +85,7 @@ module.exports = buildSchema(`
 
   type RootMutation {
     createLesson(lessonInput: LessonInput) : Lesson
-    createQuestion(questionInput: questionInput) : Question
+    createQuestion(questionInput: QuestionInput) : Question
     createUser(userInput: UserInput) : User
     completeLesson(lessonId: ID) : CompletedLesson
     resetCompletedLesson(completeLessonId: ID) : Lesson

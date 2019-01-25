@@ -1,5 +1,6 @@
 const Lesson = require('../../models/lessons.js')
 const User = require('../../models/users.js')
+const Question = require('../../models/question.js')
 const { dateToString } = require('../../helpers/date')
 
 const lessons = async (lessonIds) => {
@@ -34,16 +35,28 @@ const user = async (userId) => {
 		throw err
 	}
 }
-const transformLesson = lesson => {
+const transformLesson = async lesson => {
+	let questions = []
+	lesson._doc.questions.forEach(async questionId => {
+		let question = await Question.findById(questionId)
+		questions.push(transformQuestion(question))
+	})
 	return {
 		...lesson._doc,
 		_id: lesson.id,
 		createdOn: dateToString(lesson._doc.createdOn),
-		author: user.bind(this, lesson.author)
+		author: user.bind(this, lesson.author),
+		questions: questions
 	}
 }
 
-const transformQuestion = question => {
+const transformQuestion = async question => {
+	//TODO: Activate after converting lessons to an array
+	// let lessons = []
+	// lesson._doc.questions.forEach(async lessonId => {
+	// 	let lesson = await Lesson.findById(lessonId)
+	// 	lessons.push(transformQuestion(lesson))
+	// })
 	return {
 		...question._doc,
 		_id: question.id,
@@ -68,4 +81,5 @@ const transformCompletedLesson = completedLesson => {
 //exports.singleLesson = singleLesson;
 
 exports.transformLesson = transformLesson;
+exports.transformQuestion = transformQuestion;
 exports.transformCompletedLesson = transformCompletedLesson;
