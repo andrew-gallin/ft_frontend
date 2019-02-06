@@ -2,9 +2,6 @@ const Lesson = require('../../models/lessons.js')
 const { transformLesson } = require('./merge')
 const User = require('../../models/users');
 
-// const mongoose = require('mongoose')
-// const ObjectId = mongoose.Types.ObjectId;
-
 module.exports = {
 	lesson: async (args, req) =>{
 		try{
