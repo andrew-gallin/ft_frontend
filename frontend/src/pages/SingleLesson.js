@@ -62,20 +62,6 @@ export default class SingleLesson extends Component {
       <div>
         <h1>{lesson.title}</h1>
 
-        <Grid container spacing={24} alignItems="center" justify="center">
-            <Grid item xs ={12} className='grid-item'>
-                <h1>{lesson.questions[0].prompt}</h1>
-            </Grid>
-            <Grid item xs={6} >
-                <Grid container spacing={24}>
-                    {possibleAnswers.map(possibleAnswer =>
-                        <Grid item xs ={6} className='grid-item'>
-                            <Button variant="contained" color="primary">{possibleAnswer}</Button>
-                        </Grid>
-                    )}
-                </Grid>
-            </Grid>
-        </Grid>
       </div>
     )
   }
