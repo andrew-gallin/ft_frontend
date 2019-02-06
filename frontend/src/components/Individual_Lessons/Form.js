@@ -5,7 +5,7 @@ import './form.css'
 import { Carousel } from 'react-bootstrap';
 import TextQuestion from './text_template/text_question'
 
-const { backendMutation } = require('../../helpers/backendMutation')
+const { backendCall } = require('../../helpers/backendCall')
 const { requestBodyBuilder } = require('../../helpers/requestBodyBuilder')
 
 const difficulty_map ={
@@ -24,6 +24,7 @@ const placeholderQuestion ={
 export default class LessonForm extends Component {
     constructor(props, context) {
         super(props, context);
+
 
         this.updateQuestions = this.updateQuestions.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -75,7 +76,7 @@ export default class LessonForm extends Component {
             let requestBody = requestBodyBuilder(requestBodyObj, 'createQuestion')
 
             try{
-                let resData = await backendMutation(requestBody);
+                let resData = await backendCall(requestBody);
                 question_Ids.push(resData.data.createQuestion._id)
             }catch (err){
                 throw new Error(err)
@@ -89,7 +90,9 @@ export default class LessonForm extends Component {
         let requestBody = requestBodyBuilder(requestBodyObj, 'createLesson')
             
             try{
-                let resData = await backendMutation(requestBody);
+                console.log(requestBodyObj, requestBody);
+                
+                let resData = await backendCall(requestBody);
                 console.log(resData);
             }catch (err){
                 throw new Error(err)

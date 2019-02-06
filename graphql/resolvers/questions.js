@@ -2,9 +2,6 @@ const Question = require('../../models/question.js')
 const { transformQuestion } = require('./merge')
 const User = require('../../models/users');
 
-// const mongoose = require('mongoose')
-// const ObjectId = mongoose.Types.ObjectId;
-
 module.exports = {
 	questions: () => {
 		return Question.find()

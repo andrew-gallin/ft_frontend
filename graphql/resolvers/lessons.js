@@ -6,6 +6,16 @@ const User = require('../../models/users');
 // const ObjectId = mongoose.Types.ObjectId;
 
 module.exports = {
+	lesson: async (args, req) =>{
+		try{
+			let lesson = await Lesson.findById(args.id).populate('author').populate('questions')
+			
+			return transformLesson(lesson)
+		}catch (err) {
+			throw err
+		}		 
+	},
+
 	lessons: () => {
 		return Lesson.find()
 			.populate('author')
@@ -35,7 +45,6 @@ module.exports = {
 		try {
 			const result = await lesson.save()
 			createdLesson = transformLesson(result);
-			console.log(createdLesson);
 			
 			const author = await User.findById("5c324ab59a7bb9c27c3f8eda")//req.userId)
 			if (!author) {

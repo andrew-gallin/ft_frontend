@@ -49,6 +49,7 @@ class LessonsPage extends Component {
     }
 
     //send to the backend
+    //TODO: replace with abstraction
     try{
       let res = await fetch(backendURL, {
         method: 'POST',
@@ -78,7 +79,6 @@ class LessonsPage extends Component {
     if (isLoading) {
       return <p>Loading ...</p>;
     }
-    console.log(lessons)
     return (
     <div className="lesson-page">
     <h1>The Lessons Page</h1>

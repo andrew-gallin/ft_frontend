@@ -1,4 +1,4 @@
-exports.backendMutation = (requestBody) => {
+exports.backendCall = (requestBody) => {
     const backendURL = 'http://localhost:8000/graphql'
 
 

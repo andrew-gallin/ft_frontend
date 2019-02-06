@@ -10,6 +10,7 @@ import AuthContext from './context/auth-context'
 
 import './App.css';  
 import './components/Carousel/carousel.css'
+import SingleLesson from './pages/SingleLesson';
 
 
 class App extends Component {
@@ -46,6 +47,7 @@ class App extends Component {
                 <Route path ="/lessons" component={LessonsPage} />
                 <Route path ="/create-lesson" component={CreateLessonPage} />
                 <Route path ="/text-lesson" component={CreateTextLesson} />
+                <Route path="/lesson/:id" component={SingleLesson}/>
               </Switch>
             </main>
           </AuthContext.Provider>

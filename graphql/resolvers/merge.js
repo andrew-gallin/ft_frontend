@@ -36,17 +36,23 @@ const user = async (userId) => {
 	}
 }
 const transformLesson = async lesson => {
-	let questions = []
-	lesson._doc.questions.forEach(async questionId => {
-		let question = await Question.findById(questionId)
-		questions.push(transformQuestion(question))
-	})
-	return {
-		...lesson._doc,
-		_id: lesson.id,
-		createdOn: dateToString(lesson._doc.createdOn),
-		author: user.bind(this, lesson.author),
-		questions: questions
+	try{
+		let questions = []
+		let res = await lesson._doc.questions.map(async questionRaw => {
+			let question = await Question.findById(questionRaw._id)
+			 questions.push(transformQuestion(question))
+		})
+		const result = await Promise.all(res)
+		
+		return {
+			...lesson._doc,
+			_id: lesson.id,
+			createdOn: dateToString(lesson._doc.createdOn),
+			author: user.bind(this, lesson.author),
+			questions: questions
+		} 
+	}catch (err) {
+		throw err
 	}
 }
 

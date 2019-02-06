@@ -78,6 +78,7 @@ module.exports = buildSchema(`
 
   type RootQuery {
     lessons: [Lesson!]!
+    lesson(id: String): Lesson 
     completedLessons: [CompletedLesson!]
     users: [User!]
     login(email: String!, password: String!): AuthData!

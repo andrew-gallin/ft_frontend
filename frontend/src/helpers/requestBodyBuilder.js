@@ -1,5 +1,5 @@
 exports.requestBodyBuilder = (requestBodyParams, type) => {
-
+    //TODO: add an else case to handle type match failure
     let requestBody;
     if (type === "createQuestion"){
         requestBody = {
@@ -21,7 +21,7 @@ exports.requestBodyBuilder = (requestBodyParams, type) => {
 
     }
 
-    if (type === ''){
+    if (type === 'createLesson'){
         requestBody = {
             query: `
             mutation{
