@@ -44,7 +44,7 @@ export default class LessonForm extends Component {
     async handleSubmit(event){
         event.preventDefault();
         //Gathers form data and builds object where values are arrays if the field names are shared b/w multiple values
-        // otherwise it is 1:1 k:v
+        //otherwise it is 1:1 k:v
         const data = new FormData(event.target);
 
         let lesson = {questions: this.state.questions}

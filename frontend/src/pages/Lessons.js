@@ -49,7 +49,7 @@ class LessonsPage extends Component {
     }
 
     //send to the backend
-    //TODO: replace with abstraction
+    //TODO: replace with abstraction of backendCall
     try{
       let res = await fetch(backendURL, {
         method: 'POST',

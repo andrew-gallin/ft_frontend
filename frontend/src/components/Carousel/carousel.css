@@ -5,3 +5,12 @@
     margin: 0 auto;
     /* height:none */
 }
+
+.carousel-inner {
+    min-height: 220px;
+    background-color: darkgrey
+}
+
+.carousel-indicators{
+    bottom: 0px;
+}
