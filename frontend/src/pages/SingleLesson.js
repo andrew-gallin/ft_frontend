@@ -27,7 +27,8 @@ export default class SingleLesson extends Component {
         score: 0,
         complete: false,
         modalText: 'placeholder',
-        questionScores:[]
+        questionScores:[], //TODO: Thread through!!!
+        userId: "5c2fe0236f2bc3014e8405f0"
       }
       this.handleAnswer = this.handleAnswer.bind(this);
       this.closeModal = this.closeModal.bind(this);
@@ -88,16 +89,14 @@ export default class SingleLesson extends Component {
       })
       let requestBody = {
         query: `
-          query{
-            lesson(id: "${this.props.match.params.id}"){
+          mutation{
+            completeLesson(lessonId: "${this.state.lesson._id}", userId:"${this.state.userId}"){ 
               _id
-              title
-              difficulty
-              questions{
-                  _id
-                  prompt
-                  answer
-                  incorrectAnswers
+              lesson{
+                title
+              }
+              user{
+                  username
               }
             }
           }

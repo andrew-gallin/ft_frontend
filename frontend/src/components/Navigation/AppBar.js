@@ -140,7 +140,7 @@ class PrimarySearchAppBar extends React.Component {
       </Menu>
     );
 
-    const renderMobileMenu = (
+    const renderMobileMenu = (context) => (
       <Menu
         anchorEl={mobileMoreAnchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -148,7 +148,15 @@ class PrimarySearchAppBar extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMobileMenuClose}>
+      {!context.token && (<MenuItem onClick={this.handleMenuClose}><NavLink to="/auth">Login</NavLink></MenuItem>)}
+      {context.token && (
+        <React.Fragment>
+          <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+          <MenuItem onClick={context.logout}>Logout</MenuItem>
+        </React.Fragment>
+      )}
+        {/* <MenuItem onClick={this.handleMobileMenuClose}>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <MailIcon />
@@ -169,7 +177,7 @@ class PrimarySearchAppBar extends React.Component {
             <AccountCircle />
           </IconButton>
           <p>Profile</p>
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     );
 
@@ -237,7 +245,7 @@ class PrimarySearchAppBar extends React.Component {
                     </Toolbar>
                     </AppBar>
                     {renderMenu(context)}
-                    {renderMobileMenu}
+                    {renderMobileMenu(context)}
                 </div>
             }
         </AuthContext.Consumer>

@@ -17,14 +17,14 @@ module.exports = {
     }
   },
   completeLesson: async (args, req) => {
-    if (!req.isAuth){
-      throw new Error('Unauthenticated')
-    }
+    // if (!req.isAuth){
+    //   throw new Error('Unauthenticated')
+    // }
     try {
       //if a user has already engaged with a lesson we should update that record
       const fetchedLesson = await Lesson.findOne({_id: args.lessonId})
       const completeLesson = new CompletedLesson({
-        user:req.userId,
+        user:args.userId,
         lesson: fetchedLesson
       })
       const result = await completeLesson.save()

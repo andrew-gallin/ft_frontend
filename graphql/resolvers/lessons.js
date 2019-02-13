@@ -30,7 +30,7 @@ module.exports = {
 		// }
 		const lesson = new Lesson({
 			title: args.lessonInput.title,
-			author: "5c324ab59a7bb9c27c3f8eda", ///req.userId,
+			author: req.userId || "5c324ab59a7bb9c27c3f8eda", 
 			description: args.lessonInput.description,
 			promptLanguage: args.lessonInput.promptLanguage,
 			answerLanguage: args.lessonInput.answerLanguage,
@@ -43,7 +43,7 @@ module.exports = {
 			const result = await lesson.save()
 			createdLesson = transformLesson(result);
 			
-			const author = await User.findById("5c324ab59a7bb9c27c3f8eda")//req.userId)
+			const author = await User.findById(req.userId || "5c324ab59a7bb9c27c3f8eda")
 			if (!author) {
 				throw new Error('User not found')
 			}

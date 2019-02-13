@@ -82,10 +82,6 @@ const transformCompletedLesson = completedLesson => {
 	}
 }
 
-//exports.user = user;
-//exports.lessons = lessons;
-//exports.singleLesson = singleLesson;
-
 exports.transformLesson = transformLesson;
 exports.transformQuestion = transformQuestion;
 exports.transformCompletedLesson = transformCompletedLesson;

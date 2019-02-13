@@ -88,7 +88,7 @@ module.exports = buildSchema(`
     createLesson(lessonInput: LessonInput) : Lesson
     createQuestion(questionInput: QuestionInput) : Question
     createUser(userInput: UserInput) : User
-    completeLesson(lessonId: ID) : CompletedLesson
+    completeLesson(lessonId: ID, userId: ID) : CompletedLesson
     resetCompletedLesson(completeLessonId: ID) : Lesson
   }
 

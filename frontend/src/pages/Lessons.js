@@ -103,7 +103,7 @@ class LessonsPage extends Component {
           )}
         </Grid>
         <Grid item xs={12} sm={4} >
-          <h3>Recomended For You</h3>
+          <h3>Nex Stepst</h3>
           {lessons.slice(10,20).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>

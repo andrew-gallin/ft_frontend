@@ -26,9 +26,9 @@ const completedLessonSchema = new Schema ({
   //     }
   //   }
   // ],
-  // score: {
-  //   type: Number
-  // }
+  score: {
+    type: Number
+  }
 }, {timestamps: true})
 
 module.exports = mongoose.model('CompletedLesson', completedLessonSchema)

@@ -22,8 +22,7 @@ module.exports = {
 		//TODO - rewrite this to expect an Array, actually just open up a createBulkQuestions endpoint
 		
 		const question = new Question({
-			///TODO update placeholder id to req.userId
-			author: '5c324ab59a7bb9c27c3f8eda',
+			author: req.userId || '5c324ab59a7bb9c27c3f8eda',
 			prompt: args.questionInput.prompt,
 			answer: args.questionInput.answer,
 			incorrectAnswers: args.questionInput.incorrectAnswers || null,
@@ -40,8 +39,7 @@ module.exports = {
 		try {
 			const result = await question.save()
 			createdQuestion = transformQuestion(result);
-			///TODO update placeholder id to req.userId
-			const author = await User.findById('5c324ab59a7bb9c27c3f8eda')
+			const author = await User.findById(req.userId || '5c324ab59a7bb9c27c3f8eda')
 			if (!author) {
 				throw new Error('User not found')
 			}
