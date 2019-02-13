@@ -30,7 +30,7 @@ class ControlledCarousel extends Component {
           onSelect={this.handleSelect}
         >
           <Carousel.Item>
-            <img width={800} height={350} alt="350" src="https://www.mealgarden.com/media/cache/87/4b/874b0a4d68235557d90fe4c602b2b1de.jpg" />
+            <img width={800} height={250} alt="350" src="https://www.mealgarden.com/media/cache/87/4b/874b0a4d68235557d90fe4c602b2b1de.jpg" />
             <Carousel.Caption>
               <h3>First slide label</h3>
               <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
@@ -47,7 +47,7 @@ class ControlledCarousel extends Component {
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
-            <img width={900} height={500} alt="900x500" src="/carousel.png" />
+            <img width={900} height={250} alt="900x500" src="/carousel.png" />
             <Carousel.Caption>
               <h3>Third slide label</h3>
               <p>

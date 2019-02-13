@@ -8,6 +8,7 @@ import ProgressBar from '../components/Individual_Lessons/Progress'
 import { Carousel } from 'react-bootstrap';
 import '../components/Carousel/carousel.css';
 import './SingleLesson.css'
+import { Button } from '@material-ui/core';
 const { backendCall } = require('../helpers/backendCall')
 const shuffle = require('knuth-shuffle').knuthShuffle;
 
@@ -23,7 +24,10 @@ export default class SingleLesson extends Component {
         index: 0,
         direction: null,
         accessibleQuestions: [],
-        score: 0
+        score: 0,
+        complete: false,
+        modalText: 'placeholder',
+        questionScores:[]
       }
       this.handleAnswer = this.handleAnswer.bind(this);
       this.closeModal = this.closeModal.bind(this);
@@ -76,8 +80,38 @@ export default class SingleLesson extends Component {
       
     }
 
-    lessonComplete() {
-      alert('lesson complete, you\'re the dopest')
+    async lessonComplete() {
+      this.setState({
+        modal:true,
+        modalText: 'all done pony boy',
+        complete: true
+      })
+      let requestBody = {
+        query: `
+          query{
+            lesson(id: "${this.props.match.params.id}"){
+              _id
+              title
+              difficulty
+              questions{
+                  _id
+                  prompt
+                  answer
+                  incorrectAnswers
+              }
+            }
+          }
+        `
+      }
+      try{
+        let resData = await backendCall(requestBody);
+        let response = resData.data
+        console.log(response);
+        
+      }catch(err) {
+        console.log(err)
+        this.setState({ error: err, isLoading:false})
+      }
     }
 
     calculateScore(){
@@ -85,7 +119,6 @@ export default class SingleLesson extends Component {
       this.setState({
         score: this.state.score + points
       })
-      console.log(points);
       
     }
 
@@ -149,7 +182,10 @@ export default class SingleLesson extends Component {
               </Carousel.Item>
             ))} 
         </Carousel>
-        <QuestionModal open={this.state.modal} closeModal={this.closeModal} response={'Correct'}/>
+        <QuestionModal open={this.state.modal} closeModal={this.closeModal} response={'Correct'}> 
+          <h4>{this.state.modalText}</h4>
+          {this.state.complete && (<Button>All Set</Button>)}
+        </QuestionModal>
       </div>
     )
   }
