@@ -62,6 +62,9 @@ export default class LessonForm extends Component {
         let question_Ids = []
         for (let question of lesson.questions){
             let { prompt, answer, incorrect_answers} = question;
+            incorrect_answers = incorrect_answers.filter(el => {
+                return el != null || el.trim() !== ''
+            })
             let requestBodyObj = {
                 prompt: prompt,
                 answer: answer,

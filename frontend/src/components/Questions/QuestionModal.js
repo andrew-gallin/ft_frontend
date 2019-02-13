@@ -48,14 +48,6 @@ export class QuestionModal extends Component {
     }
         else return null;
     }
-    
-    // componentDidUpdate(prevProps, prevState) {
-    // if(prevProps.open!==this.props.open){
-    //     console.log('aha');
-        
-    //     this.setState({open: this.props.open});
-    //     }
-    // }
 
   render() {
     const { classes } = this.props;
@@ -69,11 +61,11 @@ export class QuestionModal extends Component {
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
-            <Typography variant="h6" id="modal-title">
-              Correct
+            <Typography variant="h2" id="modal-title">
+              {this.props.response}
             </Typography>
             <Typography variant="subtitle1" id="simple-modal-description">
-              You're a superstar!!!
+              {this.props.children}
             </Typography>
           </div>
         </Modal>

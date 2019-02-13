@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AuthContext from '../context/auth-context'
+// import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
 import './Auth.css'
 
@@ -62,6 +63,7 @@ class AuthPage extends Component {
     }
 
     //send to the backend
+    //TODO: Refactor to call to backend middleware
     fetch(backendURL, {
       method: 'POST',
       body: JSON.stringify(requestBody),
@@ -87,17 +89,21 @@ class AuthPage extends Component {
   render(){
     return (
       <form className="auth-form" onSubmit={this.submitHandler}>
-        <div className="form-control" id={!this.state.isLogin ? null : "username-hidden"}>
+        {/* <FormGroup className="fromy" controlId={!this.state.isLogin ? null : "username-hidden"}>
+            <ControlLabel>Lesson Title</ControlLabel>
+            <FormControl type="text" name="title" placeholder="Username" />      
+        </FormGroup> */}
+        <div className="formy" id={!this.state.isLogin ? null : "username-hidden"}>
           <label htmlFor="username">Username</label>
           <input type="username" id="username" ref={this.usernameEl} ></input>
         </div>
-        <div className="form-control">
-          <label htmlFor="email">E-mail</label>
+        <div className="formy">
+          <label htmlFor="email">E-mail:</label>
           <input type="email" id="email" ref={this.emailEl}></input>
         </div>
 
-        <div className="form-control">
-          <label htmlFor="email">Password</label>
+        <div className="formy">
+          <label htmlFor="email">Password:</label>
           <input type="password" id="password" ref={this.passwordEl}></input>
         </div>
         <div className="form-actions">

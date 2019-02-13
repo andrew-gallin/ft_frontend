@@ -8,9 +8,13 @@
   padding: 0 1rem;
   display: flex;
   align-items: center;
+  vertical-align: center;
   z-index: 100;
 }
 
+.main-navigation h2{
+  margin: 0;
+}
 .main-navigation__logo{
   margin:0;
   font-size: 1.5rem;
@@ -31,13 +35,25 @@
   margin: 0 1rem;
 }
 
-.main-navigation__items a{
+.main-navigation__items a,
+.main-navigation__items button{
   text-decoration: none;
-  color: #d5bfbf;
+  color: white;
+  /* color: #d5bfbf; */
+  padding: .25rem 0.5rem;
+  border: none;
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
 }
 
 .main-navigation__items a:hover,
 .main-navigation__items a:active,
-.main-navigation__items a.active{
-  color: #656565;
+.main-navigation__items a.active,
+.main-navigation__items button:hover,
+.main-navigation__items button:active{
+  background: #ffffff;
+  color: #5101d1;
+  border-radius: 5px;
+  text-decoration: none;
 }

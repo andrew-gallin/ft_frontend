@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 
+import React, { Component } from 'react';
 import Carousel from '../components/Carousel/Carousel'
 import '../components/Carousel/carousel.css';
 import './lessons.css'
@@ -14,12 +14,19 @@ const backendURL = 'http://localhost:8000/graphql'
 
 
 const styles = theme => ({
+  root:{
+    flexGrow:1
+  },
   lessonButton: {
     minWidth: '15em',
     textAlign: 'center',
     fontSize: '1.25rem',
     borderRadius: '10px'
   },
+  container: {
+    padding: '1rem 2.5rem',
+    backgroundColor: '#eee'
+  }
 });
 
 class LessonsPage extends Component {
@@ -71,6 +78,7 @@ class LessonsPage extends Component {
   
   render(){
     const { lessons, isLoading, error } = this.state;
+    const { classes } = this.props;
     
     if(error){
       return <p>{error.message}</p>;
@@ -81,17 +89,40 @@ class LessonsPage extends Component {
     }
     return (
     <div className="lesson-page">
-    <h1>The Lessons Page</h1>
-    <Carousel />
-    <Grid container spacing={24}>
-      {lessons.map(lesson =>
-        <Grid item xs ={3} className='grid-item'>
-          <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
-            <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
-          </NavLink>
+      <Carousel />
+      <h1>The Lessons Page</h1>
+      <Grid container className={this.props.classes.container} spacing={24} wrap={'nowrap'}>
+        <Grid item xs={12} sm={4}>
+          <h3>In Progress</h3>
+          {lessons.slice(0,10).map(lesson =>
+            <Grid item xs={12} className='grid-item'>
+              <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
+                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
+              </NavLink>
+            </Grid>
+          )}
         </Grid>
-      )}
-    </Grid>
+        <Grid item xs={12} sm={4} >
+          <h3>Recomended For You</h3>
+          {lessons.slice(10,20).map(lesson =>
+            <Grid item xs={12} className='grid-item'>
+              <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
+                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
+              </NavLink>
+            </Grid>
+          )}
+        </Grid> 
+        <Grid item xs={12} sm={4}>
+          <h3>Help Others</h3>
+          {lessons.slice(25,35).map(lesson =>
+            <Grid item xs={12} className='grid-item'>
+              <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
+                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
+              </NavLink>
+            </Grid>
+          )}
+        </Grid>
+      </Grid>
     </div>
     //Header Should be a "reccomended for you carosuel"
     //below that, buttons that launch into a guided next lesson selection choice (courses)

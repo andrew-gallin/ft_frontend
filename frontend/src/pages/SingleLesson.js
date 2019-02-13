@@ -7,15 +7,13 @@ import QuestionModal from '../components/Questions/QuestionModal'
 import ProgressBar from '../components/Individual_Lessons/Progress'
 import { Carousel } from 'react-bootstrap';
 import '../components/Carousel/carousel.css';
-import { log } from 'util';
+import './SingleLesson.css'
 const { backendCall } = require('../helpers/backendCall')
-
-
+const shuffle = require('knuth-shuffle').knuthShuffle;
 
 export default class SingleLesson extends Component {
     constructor(props) {
       super(props)
-      
       
       this.state = {
         lesson:null,
@@ -56,9 +54,14 @@ export default class SingleLesson extends Component {
         }
         try{
             let resData = await backendCall(requestBody);
-            this.setState({lesson: resData.data.lesson, 
+            let lesson = resData.data.lesson
+            lesson.questions.forEach((question, index) => {
+              lesson.questions[index].possibleAnswers = shuffle(lesson.questions[index].incorrectAnswers.concat(lesson.questions[index].answer))
+            });
+            this.setState({lesson: lesson, 
                           isLoading:false,
-                          accessibleQuestions: [resData.data.lesson.questions[0]]});
+                          accessibleQuestions: [lesson.questions[0]]});
+            
           }catch(err) {
             console.log(err)
             this.setState({ error: err, isLoading:false})
@@ -130,8 +133,8 @@ export default class SingleLesson extends Component {
     }
     
     return (
-      <div>
-        <h1>{lesson.title}</h1>
+      <div className='lesson-page'>
+        <h1 className='title'>{lesson.title}</h1>
         <ProgressBar score={score} />
         <Carousel 
           activeIndex={index}
@@ -141,12 +144,12 @@ export default class SingleLesson extends Component {
           wrap={false}>
             {accessibleQuestions.map(question => (
               <Carousel.Item key={question.prompt}>
-                <AllText key={question.prompt} possibleAnswers={question.incorrectAnswers.concat(question.answer)} prompt={question.prompt} 
+                <AllText key={question.prompt} possibleAnswers={question.possibleAnswers} prompt={question.prompt} 
                 answer={question.answer} handleAnswer={this.handleAnswer} />
               </Carousel.Item>
             ))} 
         </Carousel>
-        <QuestionModal open={this.state.modal} closeModal={this.closeModal}/>
+        <QuestionModal open={this.state.modal} closeModal={this.closeModal} response={'Correct'}/>
       </div>
     )
   }

@@ -4,6 +4,14 @@
 }
 
 .lesson-button{
-    min-width: 15em;
+    min-width: 10em;
     font-size: 1.25rem;
+}
+
+.grid-item h1{
+    width: 100%;
+}
+
+.lesson-page{
+    background-color: #eeeeee;
 }

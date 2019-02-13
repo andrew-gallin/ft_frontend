@@ -5,12 +5,13 @@ import AuthPage from './pages/Auth';
 import LessonsPage from './pages/Lessons';
 import CreateLessonPage from './pages/CreateLesson';
 import CreateTextLesson from './pages/CreateTextLesson';
-import MainNavigation from './components/Navigation/MainNavigation'
+import AppBar from './components/Navigation/AppBar'
 import AuthContext from './context/auth-context'
 
 import './App.css';  
 import './components/Carousel/carousel.css'
 import SingleLesson from './pages/SingleLesson';
+
 
 
 class App extends Component {
@@ -37,13 +38,15 @@ class App extends Component {
               logout: this.logout
               }}
           >
-            <MainNavigation />
+            {/* <MainNavigation /> */}
+            <AppBar />
             <main className="main-content">
               <Switch>
                 {!this.state.token && <Redirect from="/" to="/auth" exact />}
                 {this.state.token && <Redirect from="/" to="/lessons" exact />}
                 {this.state.token && <Redirect from="/auth" to="/lessons" exact />}
                 {!this.state.token && <Route path ="/auth" component={AuthPage} />}
+                {/* {!this.state.token && <Redirect to="/auth" exact />} */}
                 <Route path ="/lessons" component={LessonsPage} />
                 <Route path ="/create-lesson" component={CreateLessonPage} />
                 <Route path ="/text-lesson" component={CreateTextLesson} />

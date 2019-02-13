@@ -1,0 +1,22 @@
+.main-navigation__items a,
+.main-navigation__items button{
+  text-decoration: none;
+  color: white;
+  /* color: #d5bfbf; */
+  padding: .25rem 0.5rem;
+  border: none;
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.main-navigation__items a:hover,
+/* .main-navigation__items a:active,
+.main-navigation__items a.active, */
+/* .main-navigation__items button:active  */
+.main-navigation__items button:hover{
+  background: #ffffff;
+  color: #5101d1;
+  border-radius: 10px;
+  text-decoration: none;
+}
