@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-// import Grid from '@material-ui/core/Grid';
-
 import AllText from "../components/Questions/allText";
 import QuestionModal from '../components/Questions/QuestionModal'
 import ProgressBar from '../components/Individual_Lessons/Progress'
@@ -78,7 +76,6 @@ export default class SingleLesson extends Component {
       if(this.state.lesson.questions.length !== this.state.index+1){ //This is a test to see if there will be an index to move into
         this.setState({index: this.state.index + 1})
       }
-      
     }
 
     async lessonComplete() {
