@@ -6,6 +6,7 @@ module.exports = buildSchema(`
     _id: ID!
     lesson: Lesson!
     user: User!
+    score: Float
     createdAt: String!
     updatedAt: String!
   }
@@ -88,7 +89,7 @@ module.exports = buildSchema(`
     createLesson(lessonInput: LessonInput) : Lesson
     createQuestion(questionInput: QuestionInput) : Question
     createUser(userInput: UserInput) : User
-    completeLesson(lessonId: ID, userId: ID) : CompletedLesson
+    completeLesson(lessonId: ID!, userId: ID!, score: Float) : CompletedLesson
     resetCompletedLesson(completeLessonId: ID) : Lesson
   }
 

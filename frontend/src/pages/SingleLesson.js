@@ -10,6 +10,9 @@ import { Button } from '@material-ui/core';
 const { backendCall } = require('../helpers/backendCall')
 const shuffle = require('knuth-shuffle').knuthShuffle;
 
+const correctAnswerResponses =["Stay gold pony boy!", "You Rock!", "More majestic than 16 Tigers!"]
+const incorrectAnswerResponses = ["Nope", "Maybe try again", "Well at least you know which one it's not"]
+
 export default class SingleLesson extends Component {
     constructor(props) {
       super(props)
@@ -26,12 +29,15 @@ export default class SingleLesson extends Component {
         complete: false,
         modalText: 'placeholder',
         questionScores:[], //TODO: Thread through!!!
-        userId: "5c2fe0236f2bc3014e8405f0"
+        userId: "5c2fe0236f2bc3014e8405f0",
+        modalHeader: "",
+        recentAnswerCorrect:null,
       }
       this.handleAnswer = this.handleAnswer.bind(this);
       this.closeModal = this.closeModal.bind(this);
       this.handleSelect = this.handleSelect.bind(this);
       this.handleCorrectAnswer = this.handleCorrectAnswer.bind(this);
+      this.handleIncorrectAnswer = this.handleIncorrectAnswer.bind(this);
       this.lessonComplete = this.lessonComplete.bind(this);
       this.calculateScore = this.calculateScore.bind(this);
     }
@@ -71,9 +77,11 @@ export default class SingleLesson extends Component {
           }
     }
 
+
+
     closeModal(){
       this.setState({ modal: false})
-      if(this.state.lesson.questions.length !== this.state.index+1){ //This is a test to see if there will be an index to move into
+      if(this.state.lesson.questions.length !== this.state.index+1 && this.state.recentAnswerCorrect){ //This is a test to see if there will be an index to move into
         this.setState({index: this.state.index + 1})
       }
     }
@@ -81,14 +89,16 @@ export default class SingleLesson extends Component {
     async lessonComplete() {
       this.setState({
         modal:true,
+        modalHeader: "Correct",
         modalText: 'all done pony boy',
         complete: true
       })
       let requestBody = {
         query: `
           mutation{
-            completeLesson(lessonId: "${this.state.lesson._id}", userId:"${this.state.userId}"){ 
+            completeLesson(lessonId: "${this.state.lesson._id}", userId:"${this.state.userId}", score:${this.state.score}){ 
               _id
+              score
               lesson{
                 title
               }
@@ -114,24 +124,37 @@ export default class SingleLesson extends Component {
       const points = 1 / this.state.lesson.questions.length * 100
       this.setState({
         score: this.state.score + points
+      }, () => {
+        return true;
       })
-      
     }
 
-    handleCorrectAnswer() {
+    async handleCorrectAnswer() {
     if(this.state.lesson.questions.length === this.state.index+1){ //This means all questions are complete
-      setTimeout(this.calculateScore(), 500);
-      this.lessonComplete() 
+      await this.calculateScore();
+      this.lessonComplete();
     }else{
         this.setState({
           accessibleQuestions:this.state.accessibleQuestions.concat(this.state.lesson.questions[this.state.index+1]),
-          modal:true
+          modal:true,
+          recentAnswerCorrect:true,
+          modalHeader: "Correct",
+          modalText: correctAnswerResponses[Math.floor(Math.random()*correctAnswerResponses.length)]
         })
         setTimeout(this.calculateScore(), 500);
 
       } 
       return true
     }
+    handleIncorrectAnswer(){
+      this.setState({
+        modal:true,
+        modalHeader: "Not Quite Right",
+        recentAnswerCorrect:false,
+        modalText: incorrectAnswerResponses[Math.floor(Math.random()*incorrectAnswerResponses.length)]
+      })
+    }
+
     handleSelect(selectedIndex, e) {
       let index = selectedIndex
       this.setState({
@@ -140,9 +163,7 @@ export default class SingleLesson extends Component {
       });
     }
     handleAnswer(answerCorrect){
-      if(answerCorrect){
-        this.handleCorrectAnswer()  
-      }
+      answerCorrect ? this.handleCorrectAnswer() : this.handleIncorrectAnswer()
     }
   render() {
     //const lessonId = this.props.match.params.id;
@@ -178,8 +199,8 @@ export default class SingleLesson extends Component {
               </Carousel.Item>
             ))} 
         </Carousel>
-        <QuestionModal open={this.state.modal} closeModal={this.closeModal} response={'Correct'}> 
-          <h4>{this.state.modalText}</h4>
+        <QuestionModal open={this.state.modal} closeModal={this.closeModal} response={this.state.modalHeader}> 
+          <p>{this.state.modalText}</p>
           {this.state.complete && (<Button>All Set</Button>)}
         </QuestionModal>
       </div>

@@ -24,8 +24,9 @@ module.exports = {
       //if a user has already engaged with a lesson we should update that record
       const fetchedLesson = await Lesson.findOne({_id: args.lessonId})
       const completeLesson = new CompletedLesson({
-        user:args.userId,
-        lesson: fetchedLesson
+        user: args.userId,
+        lesson: fetchedLesson,
+        score: args.score
       })
       const result = await completeLesson.save()
       return transformCompletedLesson(result)

@@ -33,7 +33,7 @@ export class AllText extends Component {
     
     handleClick(event){
       event.preventDefault()
-      event.currentTarget.textContent === this.props.answer ? this.props.handleAnswer(true) : alert('wrong')
+      event.currentTarget.textContent === this.props.answer ? this.props.handleAnswer(true) : this.props.handleAnswer(false)
     }
 
   render() {

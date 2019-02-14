@@ -65,7 +65,7 @@ export class QuestionModal extends Component {
             <Typography variant="h2" id="modal-title">
               {this.props.response}
             </Typography>
-            <Typography variant="subtitle1" id="simple-modal-description">
+            <Typography variant="h4" id="simple-modal-description">
               {this.props.children}
             </Typography>
           </div>
