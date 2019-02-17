@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import AllText from "../components/Questions/allText";
-import QuestionModal from '../components/Questions/QuestionModal'
+import Modal from '../components/Questions/Modal'
 import ProgressBar from '../components/Individual_Lessons/Progress'
 import { Carousel } from 'react-bootstrap';
 import '../components/Carousel/carousel.css';
@@ -28,7 +28,7 @@ export default class SingleLesson extends Component {
         score: 0,
         complete: false,
         modalText: 'placeholder',
-        questionScores:[], //TODO: Thread through!!!
+        questionData:[], 
         userId: "5c2fe0236f2bc3014e8405f0",
         modalHeader: "",
         recentAnswerCorrect:null,
@@ -77,8 +77,6 @@ export default class SingleLesson extends Component {
           }
     }
 
-
-
     closeModal(){
       this.setState({ modal: false})
       if(this.state.lesson.questions.length !== this.state.index+1 && this.state.recentAnswerCorrect){ //This is a test to see if there will be an index to move into
@@ -96,7 +94,7 @@ export default class SingleLesson extends Component {
       let requestBody = {
         query: `
           mutation{
-            completeLesson(lessonId: "${this.state.lesson._id}", userId:"${this.state.userId}", score:${this.state.score}){ 
+            completeLesson(lessonId: "${this.state.lesson._id}", userId:"${this.state.userId}", score:${this.state.score}, questionData:${this.state}){ 
               _id
               score
               lesson{
@@ -125,17 +123,24 @@ export default class SingleLesson extends Component {
       this.setState({
         score: this.state.score + points
       }, () => {
-        return true;
+        return points;
       })
     }
 
     async handleCorrectAnswer() {
+      const { questionData, lesson, accessibleQuestions, index } = this.state
     if(this.state.lesson.questions.length === this.state.index+1){ //This means all questions are complete
       await this.calculateScore();
       this.lessonComplete();
     }else{
+      let points = await this.calculateScore()
+        questionData[index] = {
+          question: lesson.questions[index]._id,
+          score: points,
+        }
         this.setState({
-          accessibleQuestions:this.state.accessibleQuestions.concat(this.state.lesson.questions[this.state.index+1]),
+          accessibleQuestions: accessibleQuestions.concat(lesson.questions[index+1]),
+          questionData: questionData,
           modal:true,
           recentAnswerCorrect:true,
           modalHeader: "Correct",
@@ -199,10 +204,10 @@ export default class SingleLesson extends Component {
               </Carousel.Item>
             ))} 
         </Carousel>
-        <QuestionModal open={this.state.modal} closeModal={this.closeModal} response={this.state.modalHeader}> 
+        <Modal open={this.state.modal} closeModal={this.closeModal} response={this.state.modalHeader}> 
           <p>{this.state.modalText}</p>
           {this.state.complete && (<Button>All Set</Button>)}
-        </QuestionModal>
+        </Modal>
       </div>
     )
   }

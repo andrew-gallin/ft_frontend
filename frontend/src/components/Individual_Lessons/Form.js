@@ -5,6 +5,7 @@ import './form.css'
 import { Carousel } from 'react-bootstrap';
 import TextQuestion from './text_template/text_question'
 
+import Modal from '../Questions/Modal'
 const { backendCall } = require('../../helpers/backendCall')
 const { requestBodyBuilder } = require('../../helpers/requestBodyBuilder')
 
@@ -28,10 +29,12 @@ export default class LessonForm extends Component {
 
         this.updateQuestions = this.updateQuestions.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.closeModal = this.closeModal.bind(this);
 
         this.state = {
             value: '',
-            questions:[]
+            questions:[],
+            modal:false,
         };
     }
 
@@ -40,6 +43,10 @@ export default class LessonForm extends Component {
             questions: questions
         })        
     }
+
+    closeModal(){
+        this.setState({ modal: false})
+      }
 
     async handleSubmit(event){
         event.preventDefault();
@@ -62,15 +69,19 @@ export default class LessonForm extends Component {
         let question_Ids = []
         for (let question of lesson.questions){
             let { prompt, answer, incorrect_answers} = question;
+            console.log(incorrect_answers);
             incorrect_answers = incorrect_answers.filter(el => {
-                return el != null || el.trim() !== ''
+                return  el.trim() !== ""
             })
+            console.log(incorrect_answers);
+            
+            
             let requestBodyObj = {
                 prompt: prompt,
                 answer: answer,
                 prompt_language: lesson.language,
                 incorrect_answers_string: incorrect_answers.join('", "'),
-                response_language: 'English', //this should somehow come from user metadata, mor advance this can come from language detection
+                response_language: 'English', //this should somehow come from user metadata, more advance this can come from language detection
                 difficulty: lesson.difficulty,
                 type: 'text' ///this needs to come from page metadata
             }
@@ -93,10 +104,12 @@ export default class LessonForm extends Component {
         let requestBody = requestBodyBuilder(requestBodyObj, 'createLesson')
             
             try{
-                console.log(requestBodyObj, requestBody);
-                
-                let resData = await backendCall(requestBody);
-                console.log(resData);
+                await backendCall(requestBody);
+                this.setState({
+                    modal:true,
+                    modalHeader: "Lesson Submitted!",
+                    modalText: "You're amazing!"
+                })
             }catch (err){
                 throw new Error(err)
             }
@@ -133,6 +146,10 @@ export default class LessonForm extends Component {
             <Button type="submit">Finalize Lesson</Button>
         </form>
         <LessonCreator updateQuestions={this.updateQuestions}></LessonCreator>
+        <Modal open={this.state.modal} closeModal={this.closeModal} response={this.state.modalHeader}> 
+          <p>{this.state.modalText}</p>
+          <Button>All Set</Button>
+        </Modal>
       </div>
     )
   }
@@ -184,17 +201,20 @@ class LessonCreator extends Component {
       }
 
       handleSelect(selectedIndex, e) {
-          let index = selectedIndex
-          let addLesson = false
-          if(this.state.index + 1 === this.state.questions.length && e.direction === 'next'){
-            index = this.state.index
+        let index = selectedIndex;
+        let addLesson = false;
+        if(this.state.index + 1 === this.state.questions.length && e.direction === 'next'){
+            index = this.state.index + 1
             addLesson = true
-          }
-          
+        }
         this.setState({
-          index: index,
-          direction: e.direction,
           questions: addLesson ? this.state.questions.concat([{}]) : this.state.questions
+          
+        }, () => {
+            this.setState({
+                index: index,
+                direction: e.direction
+            })
         });
       }
 

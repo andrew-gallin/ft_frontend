@@ -9,6 +9,13 @@ module.exports = buildSchema(`
     score: Float
     createdAt: String!
     updatedAt: String!
+    questionData: [CompletedQuestion!]
+  }
+
+  type CompletedQuestion{
+    question: Question!
+    user: User!
+    score: Float
   }
 
   type Lesson{
@@ -54,6 +61,11 @@ module.exports = buildSchema(`
     password: String!
   }
 
+  input CompletedQuestionInput{
+    questionId: ID!
+    score: Float!
+  }
+
   input LessonInput {
     title: String!
     author: String!
@@ -89,7 +101,7 @@ module.exports = buildSchema(`
     createLesson(lessonInput: LessonInput) : Lesson
     createQuestion(questionInput: QuestionInput) : Question
     createUser(userInput: UserInput) : User
-    completeLesson(lessonId: ID!, userId: ID!, score: Float) : CompletedLesson
+    completeLesson(lessonId: ID!, userId: ID!, score: Float, questionData: [CompletedQuestionInput]) : CompletedLesson
     resetCompletedLesson(completeLessonId: ID) : Lesson
   }
 

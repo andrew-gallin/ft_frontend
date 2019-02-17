@@ -12,20 +12,17 @@ const completedLessonSchema = new Schema ({
     type:Schema.Types.ObjectId,
     ref:'User'
   },
-  // questionData:[
-  //   {
-  //     _id:{
-  //       type:Schema.Types.ObjectId,
-  //       ref: "Question"
-  //     },
-  //     score:{
-  //       type: Number
-  //     },
-  //     attemps:{
-  //       type: Number
-  //     }
-  //   }
-  // ],
+  questionData:[
+    {
+      questionId:{
+        type:Schema.Types.ObjectId,
+        ref: "CompletedQuestion"
+      },
+      score:{
+        type: Number
+      }
+    }
+  ],
   score: {
     type: Number
   }

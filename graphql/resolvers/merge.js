@@ -1,6 +1,7 @@
 const Lesson = require('../../models/lessons.js')
 const User = require('../../models/users.js')
 const Question = require('../../models/question.js')
+const CompletedQuestion = require('../../models/completedQuestion.js')
 const { dateToString } = require('../../helpers/date')
 
 const lessons = async (lessonIds) => {
@@ -23,9 +24,13 @@ const singleLesson = async lessonId => {
 	}
 }
 
-const user = async (userId) => {
+const user = async userId => {
+	console.log(userId);
+	
 	try {
 		const user = await User.findById(userId)
+		console.log(user);
+		
 		return {
 			...user._doc,
 			_id: user.id,
@@ -35,6 +40,8 @@ const user = async (userId) => {
 		throw err
 	}
 }
+
+
 const transformLesson = async lesson => {
 	try{
 		let questions = []
@@ -63,24 +70,53 @@ const transformQuestion = async question => {
 	// 	let lesson = await Lesson.findById(lessonId)
 	// 	lessons.push(transformQuestion(lesson))
 	// })
+	let author = await user.bind(this, question.author)
 	return {
 		...question._doc,
 		_id: question.id,
 		createdOn: dateToString(question._doc.createdOn),
-		author: user.bind(this, question.author)
+		author: author
 	}
 }
 
-const transformCompletedLesson = completedLesson => {
+const transformCompletedLesson = async completedLesson => {
+
+	let completedQuestions = []
+	
+	for (let i = 0; i < completedLesson.questionData.length; i++) {
+		var currentCompletedQuestion = completedLesson.questionData[i];
+		let completedQuestion =  await CompletedQuestion.findById(currentCompletedQuestion._id).populate('user').populate('question')
+		
+		let transformedCompletedLesson= await transformCompletedQuestion(completedQuestion);
+		completedQuestions.push(transformedCompletedLesson)
+	}
+
 	return {
 		...completedLesson._doc,
 		_id: completedLesson.id,
 		user: user.bind(this, completedLesson._doc.user),
 		lesson: singleLesson.bind(this, completedLesson._doc.lesson),
+		questionData: completedQuestions,
 		createdAt: dateToString(completedLesson._doc.createdAt),
 		updatedAt: dateToString(completedLesson._doc.updatedAt)
 	}
 }
+
+const transformCompletedQuestion = async completedQuestion =>{
+	console.log(completedQuestion._doc);
+	
+	let question = await transformQuestion.bind(this, completedQuestion._doc.question)	
+	let transformedUser = await user.bind(this, completedQuestion._doc.user._id)
+	
+	return {
+		...completedQuestion._doc,
+		_id: completedQuestion.id,
+		question: question,
+		createdOn: dateToString(completedQuestion.createdAt),
+		user: transformedUser
+	}
+}
+
 
 exports.transformLesson = transformLesson;
 exports.transformQuestion = transformQuestion;
