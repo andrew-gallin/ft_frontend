@@ -3,6 +3,7 @@ exports.objArrayToString = (array) => {
         let json = JSON.stringify(obj)
         return json.replace(/\"([^(\")"]+)\":/g,"$1:");
       });
-    let singleString = (arrayOfObjectStrings.join('", "'));
-    return singleString;
+    let singleString = (arrayOfObjectStrings.join(', '));
+ 
+    return String("[" + singleString+ "]");
 }

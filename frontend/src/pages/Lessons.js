@@ -97,7 +97,7 @@ class LessonsPage extends Component {
           {lessons.slice(0,3).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
-                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
+                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
               </NavLink>
             </Grid>
           )}
@@ -107,7 +107,7 @@ class LessonsPage extends Component {
           {lessons.slice(10,17).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
-                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
+                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
               </NavLink>
             </Grid>
           )}
@@ -117,7 +117,7 @@ class LessonsPage extends Component {
           {lessons.slice(20,35).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
-                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
+                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
               </NavLink>
             </Grid>
           )}

@@ -71,6 +71,8 @@ export default class SingleLesson extends Component {
             this.setState({lesson: lesson, 
                           isLoading:false,
                           accessibleQuestions: [lesson.questions[0]]});
+            window.responsiveVoice.speak(this.state.accessibleQuestions[0].prompt, "Brazilian Portuguese Female")
+
             
           }catch(err) {
             console.log(err)
@@ -82,7 +84,9 @@ export default class SingleLesson extends Component {
       this.setState({ modal: false})
       if(this.state.lesson.questions.length !== this.state.index+1 && this.state.recentAnswerCorrect){ //This is a test to see if there will be an index to move into
         this.setState({index: this.state.index + 1})
+        window.responsiveVoice.speak(this.state.accessibleQuestions[this.state.index+1].prompt, "Brazilian Portuguese Female")
       }
+
     }
 
     async lessonComplete() {
@@ -114,7 +118,7 @@ export default class SingleLesson extends Component {
         let resData = await backendCall(requestBody);
         let response = resData.data
         console.log(response);
-        
+        //this.props.history.push("/lessons");
       }catch(err) {
         console.log(err)
         this.setState({ error: err, isLoading:false})
@@ -168,6 +172,7 @@ export default class SingleLesson extends Component {
         index: index,
         direction: e.direction,
       });
+      window.responsiveVoice.speak(this.state.accessibleQuestions[selectedIndex].prompt, "Brazilian Portuguese Female")
     }
     handleAnswer(answerCorrect){
       answerCorrect ? this.handleCorrectAnswer() : this.handleIncorrectAnswer()

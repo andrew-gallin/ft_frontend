@@ -87,6 +87,8 @@ class AuthPage extends Component {
   };
 
   render(){
+    let msg = new SpeechSynthesisUtterance('Hello World');
+    window.speechSynthesis.speak(msg);
     return (
       <form className="auth-form" onSubmit={this.submitHandler}>
         {/* <FormGroup className="fromy" controlId={!this.state.isLogin ? null : "username-hidden"}>
