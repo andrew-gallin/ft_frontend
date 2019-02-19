@@ -8,6 +8,7 @@ import '../components/Carousel/carousel.css';
 import './SingleLesson.css'
 import { Button } from '@material-ui/core';
 const { backendCall } = require('../helpers/backendCall')
+const {objArrayToString } = require('../helpers/objArrayToString')
 const shuffle = require('knuth-shuffle').knuthShuffle;
 
 const correctAnswerResponses =["Stay gold pony boy!", "You Rock!", "More majestic than 16 Tigers!"]
@@ -91,14 +92,8 @@ export default class SingleLesson extends Component {
         modalText: 'all done pony boy',
         complete: true
       })
+      let questionDataString = objArrayToString(this.state.questionData)
 
-      //TODO: Abstract to helper for dealing with arrays of objexts
-      let questionDataStringify = this.state.questionData.map((question) => {
-          let json = JSON.stringify(question)
-          return json.replace(/\"([^(\")"]+)\":/g,"$1:");
-        });
-      let questionDataString = (questionDataStringify.join('", "'));
-        
       let requestBody = {
         query: `
           mutation{
