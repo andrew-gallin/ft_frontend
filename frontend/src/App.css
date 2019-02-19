@@ -1,5 +1,10 @@
 .main-content{
   text-align: center;
+  min-height: 55vh;
+}
+
+#root{
+  background-color: #eee
 }
 
 button:focus {outline:0;}

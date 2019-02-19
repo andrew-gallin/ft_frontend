@@ -7,6 +7,7 @@ import CreateLessonPage from './pages/CreateLesson';
 import CreateTextLesson from './pages/CreateTextLesson';
 import AppBar from './components/Navigation/AppBar'
 import AuthContext from './context/auth-context'
+import Footer from './components/Navigation/Footer'
 
 import './App.css';  
 import './components/Carousel/carousel.css'
@@ -53,6 +54,7 @@ class App extends Component {
                 <Route path="/lesson/:id" component={SingleLesson}/>
               </Switch>
             </main>
+            <Footer />
           </AuthContext.Provider>
         </React.Fragment>
       </BrowserRouter>

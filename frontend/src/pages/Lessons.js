@@ -94,7 +94,7 @@ class LessonsPage extends Component {
       <Grid container className={this.props.classes.container} spacing={24} wrap={'nowrap'}>
         <Grid item xs={12} sm={4}>
           <h3>In Progress</h3>
-          {lessons.slice(0,10).map(lesson =>
+          {lessons.slice(0,3).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
                 <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
@@ -103,8 +103,8 @@ class LessonsPage extends Component {
           )}
         </Grid>
         <Grid item xs={12} sm={4} >
-          <h3>Nex Stepst</h3>
-          {lessons.slice(10,20).map(lesson =>
+          <h3>Next Steps</h3>
+          {lessons.slice(10,17).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
                 <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>
@@ -114,7 +114,7 @@ class LessonsPage extends Component {
         </Grid> 
         <Grid item xs={12} sm={4}>
           <h3>Help Others</h3>
-          {lessons.slice(25,35).map(lesson =>
+          {lessons.slice(20,35).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
                 <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}   {lesson.promptLanguage}</Button>

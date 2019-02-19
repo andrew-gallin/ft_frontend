@@ -91,10 +91,18 @@ export default class SingleLesson extends Component {
         modalText: 'all done pony boy',
         complete: true
       })
+
+      //TODO: Abstract to helper for dealing with arrays of objexts
+      let questionDataStringify = this.state.questionData.map((question) => {
+          let json = JSON.stringify(question)
+          return json.replace(/\"([^(\")"]+)\":/g,"$1:");
+        });
+      let questionDataString = (questionDataStringify.join('", "'));
+        
       let requestBody = {
         query: `
           mutation{
-            completeLesson(lessonId: "${this.state.lesson._id}", userId:"${this.state.userId}", score:${this.state.score}, questionData:${this.state}){ 
+            completeLesson(lessonId: "${this.state.lesson._id}", userId:"${this.state.userId}", score:${this.state.score}, questionData:${questionDataString}){ 
               _id
               score
               lesson{
@@ -119,35 +127,34 @@ export default class SingleLesson extends Component {
     }
 
     calculateScore(){
+      const { questionData, lesson, index } = this.state
       const points = 1 / this.state.lesson.questions.length * 100
+      questionData[index] = {
+        questionId: lesson.questions[index]._id,
+        score: points
+      }
       this.setState({
-        score: this.state.score + points
+        score: this.state.score + points,
+        questionData: questionData
       }, () => {
         return points;
       })
     }
 
     async handleCorrectAnswer() {
-      const { questionData, lesson, accessibleQuestions, index } = this.state
+      const { lesson, accessibleQuestions, index } = this.state
     if(this.state.lesson.questions.length === this.state.index+1){ //This means all questions are complete
       await this.calculateScore();
       this.lessonComplete();
     }else{
-      let points = await this.calculateScore()
-        questionData[index] = {
-          question: lesson.questions[index]._id,
-          score: points,
-        }
+      await this.calculateScore()
         this.setState({
           accessibleQuestions: accessibleQuestions.concat(lesson.questions[index+1]),
-          questionData: questionData,
           modal:true,
           recentAnswerCorrect:true,
           modalHeader: "Correct",
           modalText: correctAnswerResponses[Math.floor(Math.random()*correctAnswerResponses.length)]
         })
-        setTimeout(this.calculateScore(), 500);
-
       } 
       return true
     }

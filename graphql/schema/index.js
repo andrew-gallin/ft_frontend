@@ -62,7 +62,7 @@ module.exports = buildSchema(`
   }
 
   input CompletedQuestionInput{
-    questionId: ID!
+    questionId: String!
     score: Float!
   }
 
