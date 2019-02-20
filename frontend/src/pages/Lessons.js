@@ -26,6 +26,13 @@ const styles = theme => ({
   container: {
     padding: '1rem 2.5rem',
     backgroundColor: '#eee'
+  },
+  hr: {
+    marginTop: "0",
+    marginBottom: "0",
+    borderTop: "1px solid #dfdfdf",
+    border: "1",
+    width: "60%"
   }
 });
 
@@ -94,6 +101,7 @@ class LessonsPage extends Component {
       <Grid container className={this.props.classes.container} spacing={24} wrap={'nowrap'}>
         <Grid item xs={12} sm={4}>
           <h3>In Progress</h3>
+          <hr className={classes.hr}></hr>
           {lessons.slice(0,3).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
@@ -104,6 +112,7 @@ class LessonsPage extends Component {
         </Grid>
         <Grid item xs={12} sm={4} >
           <h3>Next Steps</h3>
+          <hr className={classes.hr}></hr>
           {lessons.slice(10,17).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
@@ -114,6 +123,7 @@ class LessonsPage extends Component {
         </Grid> 
         <Grid item xs={12} sm={4}>
           <h3>Help Others</h3>
+          <hr className={classes.hr}></hr>
           {lessons.slice(20,35).map(lesson =>
             <Grid item xs={12} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>

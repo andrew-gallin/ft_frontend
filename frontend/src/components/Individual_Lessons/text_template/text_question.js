@@ -1,33 +1,54 @@
-import React from 'react'
-
-export default (props) => {
-    return(
-
-        <form className="lesson-el-form" onSubmit={props.handleSubmit}>
+import React, { Component } from 'react'
+import Formsy from 'formsy-react';
+import FormsyText from './FormsyText';
+import Button from '@material-ui/core/Button';
+  
+export class TextQuestion extends Component {
+    constructor(props) {
+        super(props);
+        this.disableButton = this.disableButton.bind(this);
+        this.enableButton = this.enableButton.bind(this);
+        this.state = { canSubmit: false };
+      }
+     
+      disableButton() {
+        this.setState({ canSubmit: false });
+      }
+     
+      enableButton() {
+        this.setState({ canSubmit: true });
+      }
+    
+  render() {
+      const props = this.props
+    return (
+        <Formsy className="lesson-el-form" onValidSubmit={props.handleSubmit} onValid={this.enableButton} onInvalid={this.disableButton}>
             <div className="prompt">
-                <label htmlFor="word">Word:</label>
-                <input type="text" id="word" name="prompt" placeholder={props.question.prompt || null}></input>
+                {/* <label htmlFor="word">Word:</label> */}
+                <FormsyText type="text" text="Prompt" required  validationError="Prompt is required" id="word" name="prompt" placeholder={props.question.prompt || null}></FormsyText>
             </div>
             <div className="answer">
-                <label htmlFor="answer">Answer:</label>
-                <input type="text" id="answer" name="answer" placeholder={props.question.answer || null}></input>
+                {/* <label htmlFor="answer">Answer:</label> */}
+                <FormsyText type="text" id="answer" required name="answer" placeholder={props.question.answer || null}></FormsyText>
             </div>
             <div className="incorrect-answer">
-                <label htmlFor="incorrect_answer_1">Incorrect Answer 1:</label>
-                <input type="text" id="incorrect_answer_1" name="incorrect_answers" placeholder = {props.question.incorrect_answers[0] || null}></input>
+                {/* <label htmlFor="incorrect_answer_1">Incorrect Answer 1:</label> */}
+                <FormsyText type="text" id="incorrect_answer_1" name="incorrect_answers" placeholder = {props.question.incorrect_answers[0] || null}></FormsyText>
             </div>
             <div className="incorrect-answer">
-                <label htmlFor="incorrect_answer_2">Incorrect Answer 2:</label>
-                <input type="text" id="incorrect_answer_2" name="incorrect_answers" placeholder = {props.question.incorrect_answers[1] || null}></input>
+                {/* <label htmlFor="incorrect_answer_2">Incorrect Answer 2:</label> */}
+                <FormsyText type="text" id="incorrect_answer_2" name="incorrect_answers" placeholder = {props.question.incorrect_answers[1] || null}></FormsyText>
             </div>
             <div className="incorrect-answer">
-                <label htmlFor="incorrect_answer_3">Incorrect Answer 3:</label>
-                <input type="text" id="incorrect_answer_3" name="incorrect_answers" placeholder = {props.question.incorrect_answers[2] || null}></input>
+                {/* <label htmlFor="incorrect_answer_3">Incorrect Answer 3:</label> */}
+                <FormsyText type="text" id="incorrect_answer_3" name="incorrect_answers" placeholder = {props.question.incorrect_answers[2] || null}></FormsyText>
             </div>
             <div className="submit_question">
-                <button>Submit Question!</button>
+                <Button type="submit" disabled={!this.state.canSubmit}>Submit Question!</Button>
             </div>
-        </form>
-        
+      </Formsy>
     )
+  }
 }
+
+export default (TextQuestion);

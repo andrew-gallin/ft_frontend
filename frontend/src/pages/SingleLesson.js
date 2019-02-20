@@ -86,7 +86,6 @@ export default class SingleLesson extends Component {
         this.setState({index: this.state.index + 1})
         window.responsiveVoice.speak(this.state.accessibleQuestions[this.state.index+1].prompt, "Brazilian Portuguese Female")
       }
-
     }
 
     async lessonComplete() {

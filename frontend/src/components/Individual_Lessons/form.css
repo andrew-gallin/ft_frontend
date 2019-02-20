@@ -15,8 +15,8 @@
 
 .lesson-el-form{
     height: 100%;
-    padding-bottom: 7rem;
-    padding-top: 7rem;
+    padding-bottom: 4rem;
+    padding-top: 4rem;
     background: gray;
 }
 
@@ -28,17 +28,6 @@
 }
 .lesson-el-form > *{
     margin-bottom: 20px;
-}
-
-.prompt{
-    margin-left: -3.5rem;
-}
-.answer{
-    margin-left: -5rem;
-}
-
-.lesson-el-form input{
-    margin-left: 20px;
 }
 
 .incorrect-answer{
@@ -56,12 +45,12 @@
     top: 45%;
     font-size: 150%;
 }
-
+@import '../../bootstrap/css/bootstrap.min.css';
 .submit_question{
     flex: 0 0 100%;
     display: flex;
     justify-content: center;
 }
 
-@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'; 
-@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css';
+/* @import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'; 
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css'; */
