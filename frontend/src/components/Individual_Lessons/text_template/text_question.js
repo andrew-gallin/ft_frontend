@@ -25,11 +25,11 @@ export class TextQuestion extends Component {
         <Formsy className="lesson-el-form" onValidSubmit={props.handleSubmit} onValid={this.enableButton} onInvalid={this.disableButton}>
             <div className="prompt">
                 {/* <label htmlFor="word">Word:</label> */}
-                <FormsyText type="text" text="Prompt" required  validationError="Prompt is required" id="word" name="prompt" placeholder={props.question.prompt || null}></FormsyText>
+                <FormsyText type="text" text="Prompt" required  validationError="Prompt is required" id="word" name="Prompt*" placeholder={props.question.prompt || null}></FormsyText>
             </div>
             <div className="answer">
                 {/* <label htmlFor="answer">Answer:</label> */}
-                <FormsyText type="text" id="answer" required name="answer" placeholder={props.question.answer || null}></FormsyText>
+                <FormsyText type="text" id="answer" required name="Answer*" placeholder={props.question.answer || null}></FormsyText>
             </div>
             <div className="incorrect-answer">
                 {/* <label htmlFor="incorrect_answer_1">Incorrect Answer 1:</label> */}

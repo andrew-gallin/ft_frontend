@@ -45,14 +45,21 @@ const styles = theme => ({
         
     },
     cssOutlinedLabel:{
+        left:"50%",
+        top:"50%",
+        transform:"translateX(-50%) translateY(-50%)"
     },
     cssShrink:{
         '&$cssOutlinedLabel':{
-        transform:"translate(-20px, -6px) scale(0.75)"
+        transform: "translateX(-140%) translateY(-210%) scale(0.75)"
+        }
+    },
+    cssShrinkIncorrectA:{
+        '&$cssOutlinedLabel':{
+            transform: "translateX(-64%) translateY(-210%) scale(0.75)"
         }
     }
   });
-
 
   const theme = createMuiTheme({
     palette: {
@@ -78,7 +85,13 @@ class FormsyText extends Component {
   render() {
     // An error message is returned only if the component is invalid
     const errorMessage = this.props.getErrorMessage();
-    const { classes } = this.props;
+    const { classes, name } = this.props;
+    let shrink = classes.cssShrink
+    if(name === "incorrect_answers"){
+        shrink = classes.cssShrinkIncorrectA
+    } 
+    console.log(name, shrink);
+    
     return (
         <div className={classes.root}>
         <TextField
@@ -92,7 +105,7 @@ class FormsyText extends Component {
                 focused: classes.cssFocused,
                 outlined: classes.cssOutlinedLabel,
                 formControl: classes.cssFormControl,
-                shrink: classes.cssShrink
+                shrink: shrink
             },
             }}
             InputProps={{

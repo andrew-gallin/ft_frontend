@@ -165,7 +165,8 @@ class LessonCreator extends Component {
         this.state = {
           index: 0,
           direction: null,
-          questions: []
+          questions: [],
+          questionSubmited: false
         };
       }
 
@@ -174,7 +175,6 @@ class LessonCreator extends Component {
       }
 
       handleSubmit(event){
-        event.preventDefault();
         //Gathers form data and builds object where values are arrays if the field names are shared b/w multiple values
         // otherwise it is 1:1 k:v
         const data = new FormData(event.target);
@@ -194,7 +194,8 @@ class LessonCreator extends Component {
         this.setState(
             {
                 questions: questions,
-                end: false
+                end: false,
+                questionSubmited: true
             }
         );
         this.props.updateQuestions(questions)
@@ -219,12 +220,16 @@ class LessonCreator extends Component {
       }
 
   render() {
-    const { index, direction, questions } = this.state;
+    const { index, direction, questions, questionSubmited } = this.state;
     let nextIcon = <span className="glyphicon glyphicon-chevron-right"></span>
     //Next Icon is a + if at the end of the lesson
     if(index === questions.length-1){
         nextIcon =<span className="glyphicon glyphicon-plus"></span>
     }
+    if(!questionSubmited && index === questions.length-1){
+        nextIcon =null
+    }
+
     return (
       <div>
           <Carousel
