@@ -129,7 +129,12 @@ class PrimarySearchAppBar extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-      {!context.token && (<MenuItem onClick={this.handleMenuClose}><NavLink to="/auth">Login</NavLink></MenuItem>)}
+      {!context.token && (
+        <React.Fragment>
+          <MenuItem onClick={this.handleMenuClose}><NavLink to="/auth">Login</NavLink></MenuItem>
+          <MenuItem onClick={this.handleMenuClose}><NavLink to="/profile">Profile</NavLink></MenuItem>
+        </React.Fragment>
+        )}
       {context.token && (
         <React.Fragment>
           <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
@@ -148,7 +153,12 @@ class PrimarySearchAppBar extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
       >
-      {!context.token && (<MenuItem onClick={this.handleMenuClose}><NavLink to="/auth">Login</NavLink></MenuItem>)}
+      {!context.token && (
+        <React.Fragment>
+          <MenuItem onClick={this.handleMenuClose}><NavLink to="/auth">Login</NavLink></MenuItem>
+          <MenuItem onClick={this.handleMenuClose}><NavLink to="/profile">Profile</NavLink></MenuItem>
+        </React.Fragment>
+        )}
       {context.token && (
         <React.Fragment>
           <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>

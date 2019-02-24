@@ -7,6 +7,7 @@ import CreateLessonPage from './pages/CreateLesson';
 import CreateTextLesson from './pages/CreateTextLesson';
 import AppBar from './components/Navigation/AppBar'
 import AuthContext from './context/auth-context'
+import Profile from './pages/Profile'
 import Footer from './components/Navigation/Footer'
 
 import './App.css';  
@@ -51,6 +52,7 @@ class App extends Component {
                 <Route path ="/lessons" component={LessonsPage} />
                 <Route path ="/create-lesson" component={CreateLessonPage} />
                 <Route path ="/text-lesson" component={CreateTextLesson} />
+                <Route path ="/profile" component={Profile} />
                 <Route path="/lesson/:id" component={SingleLesson}/>
               </Switch>
             </main>

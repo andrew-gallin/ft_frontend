@@ -7,11 +7,9 @@ import './lessons.css'
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import { NavLink } from 'react-router-dom'
-
+import { NavLink } from 'react-router-dom';
 
 const backendURL = 'http://localhost:8000/graphql'
-
 
 const styles = theme => ({
   root:{
