@@ -17,11 +17,10 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-
-/// MAKE CARD AS COMPONENT, PROFILE AS WRRAPER MAINLY
 const styles = theme => ({
 	card: {
 		maxWidth: 400,
+		margin: `${theme.spacing.unit * 2}px 0`
 	},
 	media: {
 		height: 0,
@@ -44,8 +43,6 @@ const styles = theme => ({
 		backgroundColor: red[500],
 	},
 });
-
-
 
 export class FTCard extends Component {
 	constructor(props) {
@@ -70,7 +67,8 @@ export class FTCard extends Component {
 					<CardHeader
 						avatar={
 							<Avatar aria-label="Recipe" className={classes.avatar}>
-                </Avatar>
+							AG
+                			</Avatar>
 						}
 						action={
 							<IconButton>

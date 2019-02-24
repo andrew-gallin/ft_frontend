@@ -16,9 +16,9 @@ const styles = theme => ({
     flexGrow:1
   },
   lessonButton: {
-    minWidth: '15em',
+    minWidth: '13em',
     textAlign: 'center',
-    fontSize: '1.25rem',
+    fontSize: '1.2rem',
     borderRadius: '10px'
   },
   container: {
