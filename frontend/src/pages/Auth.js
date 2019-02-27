@@ -61,7 +61,6 @@ class AuthPage extends Component {
          `
        }
     }
-
     //send to the backend
     //TODO: Refactor to call to backend middleware
     fetch(backendURL, {
