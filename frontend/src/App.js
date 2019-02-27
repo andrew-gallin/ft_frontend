@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 
 import AuthPage from './pages/Auth';
+import SignInPage from './pages/SignIn';
 import LessonsPage from './pages/Lessons';
 import CreateLessonPage from './pages/CreateLesson';
 import CreateTextLesson from './pages/CreateTextLesson';
@@ -47,7 +48,7 @@ class App extends Component {
                 {!this.state.token && <Redirect from="/" to="/auth" exact />}
                 {this.state.token && <Redirect from="/" to="/lessons" exact />}
                 {this.state.token && <Redirect from="/auth" to="/lessons" exact />}
-                {!this.state.token && <Route path ="/auth" component={AuthPage} />}
+                {!this.state.token && <Route path ="/auth" component={SignInPage} />}
                 {/* {!this.state.token && <Redirect to="/auth" exact />} */}
                 <Route path ="/lessons" component={LessonsPage} />
                 <Route path ="/create-lesson" component={CreateLessonPage} />

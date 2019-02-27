@@ -86,7 +86,6 @@ export default class LessonForm extends Component {
             }catch (err){
                 throw new Error(err)
             }
-
         }           
         let requestBodyObj ={
             lesson: lesson,
@@ -104,7 +103,6 @@ export default class LessonForm extends Component {
             }catch (err){
                 throw new Error(err)
             }
-        
       }
     
   render() {
