@@ -15,8 +15,13 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import AuthContext from '../context/auth-context'
 import SkillRater from '../components/Forms/SkillRater'
+// import LocationSearchInput from '../components/Forms/LocationAutocomplete'
+import MaterialLocation from '../components/Forms/MaterialLocation'
 
+import './SignIn.css'
 const backendURL = 'http://localhost:8000/graphql'
+
+const finalStep = 2
 
 const styles = theme => ({
   main: {
@@ -52,7 +57,8 @@ const styles = theme => ({
 
 class SignIn extends Component {
   state = {
-    isLogin: true
+    isLogin: true,
+    signUpStep: 1,
   }
 
   static contextType = AuthContext
@@ -68,6 +74,30 @@ class SignIn extends Component {
     this.setState(prevState => {
       return {isLogin: !prevState.isLogin};
     })
+  }
+
+  nextStep = () => {
+    const { signUpStep } = this.state
+    this.setState({
+        signUpStep : signUpStep + 1
+    })
+}
+
+prevStep = () => {
+    const { signUpStep } = this.state
+    this.setState({
+        signUpStep : signUpStep - 1
+    })
+}
+
+  handleChange = name => value => {
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  onNewRequest = (selectedData, searchedText, selectedDataIndex) => {
+    console.log(selectedData, searchedText, selectedDataIndex);
   }
 
   submitHandler = (event) =>  {
@@ -131,7 +161,7 @@ class SignIn extends Component {
 
   render(){
     const { classes } = this.props;
-    const { isLogin } = this.state;
+    const { isLogin, signUpStep } = this.state;
     return (
         <main className={classes.main}>
         <CssBaseline />
@@ -140,51 +170,83 @@ class SignIn extends Component {
                 <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-            Sign in
+                {isLogin ? 'Sign in' : 'Sign up'}
             </Typography>
             <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="email">Email Address</InputLabel>
-                <Input id="email" name="email" autoComplete="email" autoFocus />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <Input name="password" type="password" id="password" autoComplete="current-password" />
-            </FormControl>
-            {isLogin && <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-            />}
-            {!isLogin &&
-            <React.Fragment>
+            {signUpStep ===  1 && (<React.Fragment>
                 <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="username">Username</InputLabel>
-                    <Input id="username" name="username"  />
+                    <InputLabel htmlFor="email">Email Address</InputLabel>
+                    <Input id="email" name="email" autoComplete="email" autoFocus />
                 </FormControl>
-                <SkillRater />
+                {!isLogin &&
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="username">Username</InputLabel>
+                        <Input id="username" name="username"  />
+                    </FormControl>
+                }
                 <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="email">Languages You Speak</InputLabel>
-                    <Input id="email" name="email"  />
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <Input name="password" type="password" id="password" autoComplete="current-password" />
                 </FormControl>
-            </React.Fragment>
+                {isLogin && <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Remember me"
+                />}
+            </React.Fragment> )}
+            {(!isLogin && signUpStep ===2) &&(
+                <React.Fragment>
+                    <MaterialLocation />
+                    <SkillRater />
+                    {/* <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="email">Languages You Speak</InputLabel>
+                        <Input id="email" name="email"  />
+                    </FormControl> */}
+
+                </React.Fragment>
+            )
             }
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-            >
-                Sign in
-            </Button>
+            <div className={(signUpStep !== 1) ? "buttonWrapper" : 'null'}>
+                {signUpStep !== 1 && (
+                    <Button
+                        onClick={this.prevStep}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        >
+                        Previous
+                    </Button>)}
+                {(isLogin || (signUpStep === finalStep)) && ( 
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        {isLogin ? 'Sign in' : (signUpStep === finalStep) ? 'Sign Up' : 'Save and Continue'}
+                    </Button>
+                )}
+                {(!isLogin && signUpStep < finalStep) &&(
+                    <Button
+                        onClick={this.nextStep}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Save and Continue
+                    </Button>
+                )}
+            </div>
             <Button
                 onClick={this.switchModeHandler}
                 variant="contained"
                 fullWidth
-                color="primary"
+                color="tertiary"
                 className={classes.submit}
             >
-                No Account? Sign up
+                {isLogin ? 'No Account? Sign up' : 'I have an Account. Sign me in'} 
             </Button>
             </form>
         </Paper>

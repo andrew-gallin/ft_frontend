@@ -38,4 +38,4 @@ SkillRater.propTypes = {
     theme: PropTypes.object.isRequired,
   };
 
-export default withStyles(styles)(SkillRater)
+export default withStyles(styles, { withTheme: true })(SkillRater)

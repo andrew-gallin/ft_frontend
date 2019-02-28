@@ -117,6 +117,7 @@ export default class SingleLesson extends Component {
         let resData = await backendCall(requestBody);
         let response = resData.data
         console.log(response);
+        //TODO: Something after addition
         //this.props.history.push("/lessons");
       }catch(err) {
         console.log(err)

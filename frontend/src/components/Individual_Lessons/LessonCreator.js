@@ -58,7 +58,6 @@ export default class LessonCreator extends Component {
         let index = selectedIndex;
         let addLesson = false;
         if(this.state.index + 1 === this.state.questions.length && e.direction === 'next' && this.state.questionSubmited){
-            console.log('triggered')
             index = this.state.index + 1
             addLesson = true
         }
