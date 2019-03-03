@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import Icon from '@material-ui/core/Icon';
+import green from '@material-ui/core/colors/green';
+
 
 import AuthContext from '../context/auth-context'
 import SkillRater from '../components/Forms/SkillRater'
@@ -30,7 +33,7 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
+      width: 450,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
@@ -40,6 +43,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    textAlign: 'left',
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
   },
   avatar: {
@@ -53,51 +57,201 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  icon: {
+    margin: 0,
+  },
+  iconHover: {
+    margin: 0,
+    fontSize: '20px',
+    '&:hover': {
+      color: green[400],
+    },
+  }
 });
 
+const suggestions =  [
+      { label: 'English (US)' },
+      { label: 'Portuguese (BRA)' },
+      { label: 'Spanish (Mex)' },
+    ]
 class SignIn extends Component {
   state = {
     isLogin: true,
-    signUpStep: 1,
+    signUpStep: 2,
+    email:null,
+    username:null,
+    password:null,
+    confirm_password:null,
+    location:null,
+    languages_spoken:[{language:null, value: 50}],
+    languages_learning:[{language:null, value: 50}],
+    learningSuggestions: suggestions,
+    speakingSuggestions: suggestions,
   }
 
-  static contextType = AuthContext
+    static contextType = AuthContext
 
-  constructor(props){
-    super(props);
-    this.emailEl = React.createRef();
-    this.passwordEl = React.createRef();
-    this.usernameEl = React.createRef();
-  }
-  switchModeHandler = (event) => {
-    event.preventDefault();
-    this.setState(prevState => {
-      return {isLogin: !prevState.isLogin};
-    })
-  }
+    constructor(props) {
+        super(props);
+        this.emailEl = React.createRef();
+        this.passwordEl = React.createRef();
+        this.usernameEl = React.createRef();
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleLocation = this.handleLocation.bind(this);
+        this.handleLanguageRating = this.handleLanguageRating.bind(this);
+        this.addLanguage = this.addLanguage.bind(this)
+        this.updateSuggestions = this.updateSuggestions.bind(this)
+    }
+    switchModeHandler = (event) => {
+        event.preventDefault();
+        this.setState(prevState => {
+            return { isLogin: !prevState.isLogin };
+        })
+    }
 
-  nextStep = () => {
-    const { signUpStep } = this.state
-    this.setState({
-        signUpStep : signUpStep + 1
-    })
-}
+    nextStep = () => {
+        const { signUpStep } = this.state
+        this.setState({
+            signUpStep: signUpStep + 1
+        })
+    }
 
-prevStep = () => {
-    const { signUpStep } = this.state
-    this.setState({
-        signUpStep : signUpStep - 1
-    })
-}
+    prevStep = () => {
+        const { signUpStep } = this.state
+        this.setState({
+            signUpStep: signUpStep - 1
+        })
+    }
 
-  handleChange = name => value => {
-    this.setState({
-      [name]: value,
-    });
-  };
+    handleLocation = (suggestion) => {
+        this.setState({
+            location: suggestion.description
+        })
+    }
 
-  onNewRequest = (selectedData, searchedText, selectedDataIndex) => {
-    console.log(selectedData, searchedText, selectedDataIndex);
+    updateSuggestions = (languageRating, index, learning) => {
+      const {learningSuggestions, speakingSuggestions, languages_learning, languages_spoken} = this.state
+      let addedLanguage;
+      let newSuggestions;
+      if (learning){
+        newSuggestions = learningSuggestions
+        if(languageRating.language === null){
+          addedLanguage = {label: languages_learning[index].language} 
+          newSuggestions.push(addedLanguage)
+        }else{
+          newSuggestions = newSuggestions.filter((value, index) => {
+            return value.label !== languageRating.language
+          })
+        }
+      }else{
+        newSuggestions = speakingSuggestions
+        if(languageRating.language === null){
+          if(languages_spoken[index].language !== null){
+            addedLanguage = {label: languages_spoken[index].language} 
+            newSuggestions.push(addedLanguage)
+          }
+          
+        }else{
+          newSuggestions = newSuggestions.filter((value, index) => {
+            return value.label !== languageRating.language
+          })
+        }
+        
+      }
+      return newSuggestions
+    }
+
+    //Handles ratings created with Skill Rater. learning is a bool
+    handleLanguageRating = (languageRating, index, learning) => {
+      
+      const {suggestions, languages_learning, languages_spoken} = this.state
+        let newSuggestions = this.updateSuggestions(languageRating, index, learning)
+           
+        if(learning){
+          let newLanguages_learning = [...languages_learning]
+          newLanguages_learning[index] = languageRating
+
+          this.setState ({
+            languages_learning: newLanguages_learning,
+            learningSuggestions: newSuggestions
+          })
+        }else{
+          let newLanguages_spoken = [...languages_spoken]
+          newLanguages_spoken[index] = languageRating
+          
+          this.setState ({
+            languages_spoken: newLanguages_spoken,
+            speakingSuggestions: newSuggestions
+          })
+        }
+        
+    }
+
+    addLanguage= (learning) =>{
+      const {languages_learning, languages_spoken } = this.state
+      console.log('working')
+      if(learning){
+        console.log(languages_learning[languages_learning.length-1].language)
+        if(languages_learning[languages_learning.length-1].language == null){
+          return null
+        }
+        let new_languages_learning = [...this.state.languages_learning]
+        new_languages_learning.push({language:null, value:50})
+        this.setState ({
+          languages_learning: new_languages_learning
+        })
+      }else{
+        console.log(languages_spoken[languages_spoken.length -1]);
+        
+        if(languages_spoken[languages_spoken.length -1].language == null){
+          return null
+        }
+        let new_languages_spoken = [...this.state.languages_spoken]
+        new_languages_spoken.push({language:null, value:50})
+        
+        this.setState ({
+          languages_spoken: new_languages_spoken
+        })
+      }
+    }
+
+    subtractLanguage = (learning, index) =>{
+      if(learning){
+        this.setState ({
+          languages_learning: this.state.languages_learning.splice(index, 1)
+        })
+      }else{
+        this.setState ({
+          languages_spoken: this.state.languages_spoken.splice(index, 1)
+        })
+      }
+      
+    }
+
+    handleChange = () => event => {
+        console.log(event.target.name, event.target.value);
+
+        this.setState({
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    onNewRequest = (selectedData, searchedText, selectedDataIndex) => {
+        console.log(selectedData, searchedText, selectedDataIndex);
+    }
+
+  handleSubmit = (event) =>  {
+      //TODO logic based on page steo and fields as to whether to advace the page or actually submit
+      event.preventDefault();
+      const {email, username, password, confirm_password} = this.state
+      console.log(email, username, password)
+      console.log((this.state.signUpStep < finalStep))
+      console.log((this.state.signUpStep <finalStep) && email && username && password)
+      if(this.state.signUpStep <finalStep && email && username && password){
+        this.nextStep()
+        return;
+      }
   }
 
   submitHandler = (event) =>  {
@@ -107,7 +261,7 @@ prevStep = () => {
     const password = this.passwordEl.current.value;
 
     //Could add more robust validation and feedback here
-    if (email.trim().length === 0 || password.trim().length ===0){
+    if (email.trim().length === 0 || password.trim().length === 0){
       return;
     }
 
@@ -161,7 +315,17 @@ prevStep = () => {
 
   render(){
     const { classes } = this.props;
-    const { isLogin, signUpStep } = this.state;
+    const { isLogin, signUpStep, languages_learning, languages_spoken, learningSuggestions, speakingSuggestions } = this.state;
+    const learningSuggestionsArr = learningSuggestions.map(suggestion => ({
+      value: suggestion.label,
+      label: suggestion.label,
+    }));
+    const speakingSuggestionsArr = speakingSuggestions.map(suggestion => ({
+      value: suggestion.label,
+      label: suggestion.label,
+    }));
+    
+    
     return (
         <main className={classes.main}>
         <CssBaseline />
@@ -172,22 +336,28 @@ prevStep = () => {
             <Typography component="h1" variant="h5">
                 {isLogin ? 'Sign in' : 'Sign up'}
             </Typography>
-            <form className={classes.form}>
+            <form className={classes.form} onSubmit={this.handleSubmit}>
             {signUpStep ===  1 && (<React.Fragment>
                 <FormControl margin="normal" required fullWidth>
                     <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input id="email" name="email" autoComplete="email" autoFocus />
+                    <Input onChange={this.handleChange()} id="email" name="email" autoComplete="email" autoFocus />
                 </FormControl>
                 {!isLogin &&
                     <FormControl margin="normal" required fullWidth>
                         <InputLabel htmlFor="username">Username</InputLabel>
-                        <Input id="username" name="username"  />
+                        <Input onChange={this.handleChange()} id="username" name="username"  />
                     </FormControl>
                 }
                 <FormControl margin="normal" required fullWidth>
                     <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input name="password" type="password" id="password" autoComplete="current-password" />
+                    <Input name="password" type="password" id="password" onChange={this.handleChange()} autoComplete="current-password" />
                 </FormControl>
+                {!isLogin &&
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="confirm_password">Confirm Password</InputLabel>
+                        <Input onChange={this.handleChange()} id="confirm_password" name="confirm_password"  />
+                    </FormControl>
+                }
                 {isLogin && <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
@@ -195,13 +365,32 @@ prevStep = () => {
             </React.Fragment> )}
             {(!isLogin && signUpStep ===2) &&(
                 <React.Fragment>
-                    <MaterialLocation />
-                    <SkillRater />
-                    {/* <FormControl margin="normal" required fullWidth>
-                        <InputLabel htmlFor="email">Languages You Speak</InputLabel>
-                        <Input id="email" name="email"  />
-                    </FormControl> */}
-
+                    <FormControl margin="normal" required fullWidth>
+                        <MaterialLocation handleLocation={this.handleLocation} />
+                    </FormControl>
+                    <h3>Languages you speak</h3>
+                    {languages_spoken.map((language, index) => { 
+                      return(
+                        <SkillRater key= {'language' + index} index={index} learning={false} 
+                        handleLanguageRating={this.handleLanguageRating} language={language} 
+                        step={5} handleSubmit={this.handleSubmit} suggestions={speakingSuggestionsArr} />
+                      )
+                    })}
+                    <Icon className={classes.iconHover} onClick={this.addLanguage.bind(this,false)} color={'action'} style={{ fontSize: 20 }} >
+                      add_circle
+                    </Icon>
+                    <br></br>
+                    <h3>Languages you are learning</h3>
+                    {languages_learning.map((language, index) => { 
+                      return(
+                        <SkillRater key= {'language' + index} index={index} learning={true} 
+                        handleLanguageRating={this.handleLanguageRating} language={language} 
+                        step={5} handleSubmit={this.handleSubmit} suggestions={learningSuggestionsArr} />
+                      )
+                    })}
+                    <Icon className={classes.iconHover} onClick={this.addLanguage.bind(this,true)} color={'action'} style={{ fontSize: 20 }} >
+                      add_circle
+                    </Icon>
                 </React.Fragment>
             )
             }
@@ -229,7 +418,8 @@ prevStep = () => {
                 )}
                 {(!isLogin && signUpStep < finalStep) &&(
                     <Button
-                        onClick={this.nextStep}
+                        type="submit"
+                        // onClick={this.handleSubmit}
                         fullWidth
                         variant="contained"
                         color="primary"
@@ -243,7 +433,7 @@ prevStep = () => {
                 onClick={this.switchModeHandler}
                 variant="contained"
                 fullWidth
-                color="tertiary"
+                color="default"
                 className={classes.submit}
             >
                 {isLogin ? 'No Account? Sign up' : 'I have an Account. Sign me in'} 

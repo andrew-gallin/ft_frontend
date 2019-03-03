@@ -94,7 +94,7 @@ class LessonsPage extends Component {
     }
     return (
     <div className="lesson-page">
-      <Carousel />
+      {/* <Carousel /> */}
       <h1>The Lessons Page</h1>
       <Grid container className={this.props.classes.container} spacing={24} wrap={'nowrap'}>
         <Grid item xs={12} sm={4}>

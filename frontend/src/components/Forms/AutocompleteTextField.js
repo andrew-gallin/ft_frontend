@@ -18,51 +18,10 @@ import { emphasize } from '@material-ui/core/styles/colorManipulator';
 // Suggestions: An array of objects with a key value pair following the format of {label: "example"}
 // Placeholder text
 
-const suggestions = [
-  { label: 'Afghanistan' },
-  { label: 'Aland Islands' },
-  { label: 'Albania' },
-  { label: 'Algeria' },
-  { label: 'American Samoa' },
-  { label: 'Andorra' },
-  { label: 'Angola' },
-  { label: 'Anguilla' },
-  { label: 'Antarctica' },
-  { label: 'Antigua and Barbuda' },
-  { label: 'Argentina' },
-  { label: 'Armenia' },
-  { label: 'Aruba' },
-  { label: 'Australia' },
-  { label: 'Austria' },
-  { label: 'Azerbaijan' },
-  { label: 'Bahamas' },
-  { label: 'Bahrain' },
-  { label: 'Bangladesh' },
-  { label: 'Barbados' },
-  { label: 'Belarus' },
-  { label: 'Belgium' },
-  { label: 'Belize' },
-  { label: 'Benin' },
-  { label: 'Bermuda' },
-  { label: 'Bhutan' },
-  { label: 'Bolivia, Plurinational State of' },
-  { label: 'Bonaire, Sint Eustatius and Saba' },
-  { label: 'Bosnia and Herzegovina' },
-  { label: 'Botswana' },
-  { label: 'Bouvet Island' },
-  { label: 'Brazil' },
-  { label: 'British Indian Ocean Territory' },
-  { label: 'Brunei Darussalam' },
-].map(suggestion => ({
-  value: suggestion.label,
-  label: suggestion.label,
-}));
-
 const styles = theme => ({
   root: {
     flexGrow: 1,
     height: theme.spacing.unit * 6,
-    marginTop: theme.spacing.unit * 3.5
   },
   input: {
     display: 'flex',
@@ -224,6 +183,7 @@ class AutocompleteTextField extends React.Component {
     this.setState({
       [name]: value,
     });
+    this.props.handleLanguage(value)
   };
 
   render() {
@@ -238,18 +198,18 @@ class AutocompleteTextField extends React.Component {
         },
       }),
     };
-
+    
     return (
       <div className={classes.root}>
         <NoSsr>
           <Select
             classes={classes}
             styles={selectStyles}
-            options={suggestions}
+            options={this.props.suggestions}
             components={components}
             value={this.state.single}
             onChange={this.handleChange('single')}
-            placeholder="Search a country"
+            placeholder="Select a language"
             isClearable
           />
         </NoSsr>

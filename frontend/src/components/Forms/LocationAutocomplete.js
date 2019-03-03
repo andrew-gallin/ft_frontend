@@ -1,10 +1,12 @@
+//CURRENTLY NOT USED ANYWHERE DUE TO STYLING WORK NEEDING TO BE DONE TO MATCH TO MATERIAL UI
+
 import React from 'react';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
 
-//TOD bias with searchOptions based on browser location data
+//TODO bias with searchOptions based on browser location data
 
 class LocationSearchInput extends React.Component {
   constructor(props) {
