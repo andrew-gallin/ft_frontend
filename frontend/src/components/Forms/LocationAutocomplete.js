@@ -1,5 +1,4 @@
 //CURRENTLY NOT USED ANYWHERE DUE TO STYLING WORK NEEDING TO BE DONE TO MATCH TO MATERIAL UI
-
 import React from 'react';
 import PlacesAutocomplete, {
   geocodeByAddress,

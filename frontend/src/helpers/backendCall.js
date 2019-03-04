@@ -1,3 +1,4 @@
+//Takes in a request body string and returns jsonified data from the graphql call
 exports.backendCall = (requestBody) => {
     const backendURL = 'http://localhost:8000/graphql'
 

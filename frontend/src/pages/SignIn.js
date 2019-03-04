@@ -23,6 +23,8 @@ import MaterialLocation from '../components/Forms/MaterialLocation'
 import './SignIn.css'
 const backendURL = 'http://localhost:8000/graphql'
 const finalStep = 2
+const { objArrayToString } = require('../helpers/objArrayToString')
+const { signInSignUp } = require('../helpers/signInSignUp')
 
 const styles = theme => ({
   main: {
@@ -169,7 +171,6 @@ class SignIn extends Component {
       }
       return newSuggestions
     }
-
     //Handles ratings created with Skill Rater. learning is a bool
     handleLanguageRating = (languageRating, index, learning) => {
       
@@ -238,8 +239,6 @@ class SignIn extends Component {
     }
 
     handleChange = () => event => {
-        console.log(event.target.name, event.target.value);
-
         this.setState({
             [event.target.name]: event.target.value,
         });
@@ -255,10 +254,17 @@ class SignIn extends Component {
       return true
     }
 
-  handleSubmit = (event) =>  {
-      //TODO logic based on page steo and fields as to whether to advace the page or actually submit
+  handleSubmit = async (event) =>  {
       event.preventDefault();
-      const {email, username, password, confirm_password, location, languages_learning, languages_spoken} = this.state
+      const {email, username, password, confirm_password, location, languages_learning, languages_spoken, isLogin} = this.state
+      if(isLogin && email && password){
+        let obj = {
+          email:email,
+          password: password,
+        }
+        let loginData = await signInSignUp(obj, this.state.isLogin)
+        this.context.login(loginData.login.token, loginData.login.userId, loginData.login.tokenExpiration)
+      }
       if(this.state.signUpStep === finalStep && location){
         let valid = this.validateSignUpInfo(email, username, password, confirm_password)
         if(!valid){
@@ -269,8 +275,20 @@ class SignIn extends Component {
         let filtered_languages_learning = languages_learning.filter((language) => {
           return language.language !== null
         })
+        filtered_languages_learning = filtered_languages_learning.map((language) => {
+          return {
+            language: language.language,
+            rating: language.value
+          }
+        })
         let filtered_languages_spoken = languages_spoken.filter((language) => {
           return language.language !== null
+        })
+        filtered_languages_spoken = filtered_languages_spoken.map((language) => {
+          return {
+            language: language.language,
+            rating: language.value
+          }
         })
         let obj = {
           email:email,
@@ -280,13 +298,16 @@ class SignIn extends Component {
           languages_learning: filtered_languages_learning,
           languages_spoken: filtered_languages_spoken
         }
-
-
+        //this.submitHandler(obj)
+        let loginData = await signInSignUp(obj, this.state.isLogin)
+        this.context.login(loginData.login.token, loginData.login.userId, loginData.login.tokenExpiration)
+        
       }
       if(this.state.signUpStep < finalStep && email && username && password && confirm_password){
         this.nextStep()
         return;
       }
+
   }
 
   submitHandler = (userObj) =>  {
@@ -304,10 +325,12 @@ class SignIn extends Component {
     }
 
     if (!this.state.isLogin) {
+      let leanguages_learning_sting = objArrayToString(languages_learning)
+      let languages_spoken_sting = objArrayToString(languages_spoken)
       requestBody ={
          query: `
            mutation{
-             createUser(userInput:{email: "${email}", username: "${username}", password: "${password}", location: "${location}}){
+             createUser(userInput:{email: "${email}", username: "${username}", password: "${password}", location: "${location}", spokenLanguageSkill: ${languages_spoken_sting}, learningLanguageSkill: ${leanguages_learning_sting}}){
                _id
                email
              }
@@ -325,7 +348,7 @@ class SignIn extends Component {
       }
     }).then(res => {
       if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!')
+        throw new Error('Call to GraphQL Failed!') 
       }
       return res.json();
     })
