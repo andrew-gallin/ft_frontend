@@ -310,58 +310,6 @@ class SignIn extends Component {
 
   }
 
-  submitHandler = (userObj) =>  {
-    const {email, username, password, location, languages_learning, languages_spoken} = userObj
-    let requestBody = {
-      query: `
-        query {
-          login(email: "${email}", password: "${password}"){
-            userId
-            token
-            tokenExpiration
-          }
-        }
-      `
-    }
-
-    if (!this.state.isLogin) {
-      let leanguages_learning_sting = objArrayToString(languages_learning)
-      let languages_spoken_sting = objArrayToString(languages_spoken)
-      requestBody ={
-         query: `
-           mutation{
-             createUser(userInput:{email: "${email}", username: "${username}", password: "${password}", location: "${location}", spokenLanguageSkill: ${languages_spoken_sting}, learningLanguageSkill: ${leanguages_learning_sting}}){
-               _id
-               email
-             }
-           }
-         `
-       }
-    }
-    //send to the backend
-    //TODO: Refactor to call to backend middleware
-    fetch(backendURL, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    }).then(res => {
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Call to GraphQL Failed!') 
-      }
-      return res.json();
-    })
-    .then(resData => {
-      if(resData.data.login.token){
-        this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration)
-      }
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  };
-
   render(){
     const { classes } = this.props;
     const { isLogin, signUpStep, languages_learning, languages_spoken, learningSuggestions, speakingSuggestions } = this.state;
@@ -373,7 +321,6 @@ class SignIn extends Component {
       value: suggestion.label,
       label: suggestion.label,
     }));
-    
     
     return (
         <main className={classes.main}>
