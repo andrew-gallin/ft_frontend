@@ -18,12 +18,10 @@ import green from '@material-ui/core/colors/green';
 
 import AuthContext from '../context/auth-context'
 import SkillRater from '../components/Forms/SkillRater'
-// import LocationSearchInput from '../components/Forms/LocationAutocomplete'
 import MaterialLocation from '../components/Forms/MaterialLocation'
 
 import './SignIn.css'
 const backendURL = 'http://localhost:8000/graphql'
-
 const finalStep = 2
 
 const styles = theme => ({
@@ -57,6 +55,10 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  previous:{
+    marginTop: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit
+  },
   icon: {
     margin: 0,
   },
@@ -77,7 +79,7 @@ const suggestions =  [
 class SignIn extends Component {
   state = {
     isLogin: true,
-    signUpStep: 2,
+    signUpStep: 1,
     email:null,
     username:null,
     password:null,
@@ -106,7 +108,13 @@ class SignIn extends Component {
     switchModeHandler = (event) => {
         event.preventDefault();
         this.setState(prevState => {
-            return { isLogin: !prevState.isLogin };
+          let step = prevState.signUpStep
+          if(!prevState.isLogin){
+            step = 1         
+          }
+            return { 
+              isLogin: !prevState.isLogin,
+              signUpStep: step };
         })
     }
 
@@ -165,7 +173,7 @@ class SignIn extends Component {
     //Handles ratings created with Skill Rater. learning is a bool
     handleLanguageRating = (languageRating, index, learning) => {
       
-      const {suggestions, languages_learning, languages_spoken} = this.state
+      const {languages_learning, languages_spoken} = this.state
         let newSuggestions = this.updateSuggestions(languageRating, index, learning)
            
         if(learning){
@@ -237,34 +245,52 @@ class SignIn extends Component {
         });
     };
 
-    onNewRequest = (selectedData, searchedText, selectedDataIndex) => {
-        console.log(selectedData, searchedText, selectedDataIndex);
+    validateSignUpInfo = (email, username, password, confirm_password) =>{
+      if (email.trim().length === 0 || password.trim().length === 0 || username.trim().length === 0){
+        return false;
+      }
+      if (password !== confirm_password){
+        return false;
+      }
+      return true
     }
 
   handleSubmit = (event) =>  {
       //TODO logic based on page steo and fields as to whether to advace the page or actually submit
       event.preventDefault();
-      const {email, username, password, confirm_password} = this.state
-      console.log(email, username, password)
-      console.log((this.state.signUpStep < finalStep))
-      console.log((this.state.signUpStep <finalStep) && email && username && password)
-      if(this.state.signUpStep <finalStep && email && username && password){
+      const {email, username, password, confirm_password, location, languages_learning, languages_spoken} = this.state
+      if(this.state.signUpStep === finalStep && location){
+        let valid = this.validateSignUpInfo(email, username, password, confirm_password)
+        if(!valid){
+          alert('Invalid Info')
+          return false
+        }
+        //filter speak and learning languages
+        let filtered_languages_learning = languages_learning.filter((language) => {
+          return language.language !== null
+        })
+        let filtered_languages_spoken = languages_spoken.filter((language) => {
+          return language.language !== null
+        })
+        let obj = {
+          email:email,
+          username: username,
+          password: password,
+          location: location,
+          languages_learning: filtered_languages_learning,
+          languages_spoken: filtered_languages_spoken
+        }
+
+
+      }
+      if(this.state.signUpStep < finalStep && email && username && password && confirm_password){
         this.nextStep()
         return;
       }
   }
 
-  submitHandler = (event) =>  {
-    event.preventDefault();
-    const email = this.emailEl.current.value;
-    const username = this.usernameEl.current.value;
-    const password = this.passwordEl.current.value;
-
-    //Could add more robust validation and feedback here
-    if (email.trim().length === 0 || password.trim().length === 0){
-      return;
-    }
-
+  submitHandler = (userObj) =>  {
+    const {email, username, password, location, languages_learning, languages_spoken} = userObj
     let requestBody = {
       query: `
         query {
@@ -281,7 +307,7 @@ class SignIn extends Component {
       requestBody ={
          query: `
            mutation{
-             createUser(userInput:{email: "${email}", username: "${username}", password: "${password}"}){
+             createUser(userInput:{email: "${email}", username: "${username}", password: "${password}", location: "${location}}){
                _id
                email
              }
@@ -340,7 +366,7 @@ class SignIn extends Component {
             {signUpStep ===  1 && (<React.Fragment>
                 <FormControl margin="normal" required fullWidth>
                     <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input onChange={this.handleChange()} id="email" name="email" autoComplete="email" autoFocus />
+                    <Input onChange={this.handleChange()} id="email" name="email" autoComplete="email" value={this.state.email ? this.state.email : null} autoFocus />
                 </FormControl>
                 {!isLogin &&
                     <FormControl margin="normal" required fullWidth>
@@ -363,7 +389,7 @@ class SignIn extends Component {
                     label="Remember me"
                 />}
             </React.Fragment> )}
-            {(!isLogin && signUpStep ===2) &&(
+            {(!isLogin && signUpStep ===2) && (
                 <React.Fragment>
                     <FormControl margin="normal" required fullWidth>
                         <MaterialLocation handleLocation={this.handleLocation} />
@@ -401,13 +427,14 @@ class SignIn extends Component {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}
+                        className={classes.previous}
                         >
                         Previous
                     </Button>)}
                 {(isLogin || (signUpStep === finalStep)) && ( 
                     <Button
                         type="submit"
+                        onClick={this.handleSubmit}
                         fullWidth
                         variant="contained"
                         color="primary"
@@ -419,7 +446,6 @@ class SignIn extends Component {
                 {(!isLogin && signUpStep < finalStep) &&(
                     <Button
                         type="submit"
-                        // onClick={this.handleSubmit}
                         fullWidth
                         variant="contained"
                         color="primary"
@@ -429,10 +455,7 @@ class SignIn extends Component {
                     </Button>
                 )}
             </div>
-            <Button
-                onClick={this.switchModeHandler}
-                variant="contained"
-                fullWidth
+            <Button onClick={this.switchModeHandler} variant="contained" fullWidth
                 color="default"
                 className={classes.submit}
             >

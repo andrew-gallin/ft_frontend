@@ -15,6 +15,34 @@ const userSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	location:{
+		type: String,
+		required: true,
+	},
+	spokenLanguageSkill:[
+		{
+			language:{
+				type: String,
+				required:true
+			},
+			rating:{
+				type: Number,
+				required:true
+			}
+		}
+	],
+	learningLanguageSkill:[
+		{
+			language:{
+				type: String,
+				required:true
+			},
+			rating:{
+				type: Number,
+				required:true
+			}
+		}
+	],
 	createdLessons: [
 		{
 			type: Schema.Types.ObjectId,

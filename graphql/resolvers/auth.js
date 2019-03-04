@@ -27,7 +27,9 @@ module.exports = {
       const user = new User({
         username: args.userInput.username,
         email: args.userInput.email,
-        password: hashedPassword
+        password: hashedPassword,
+        location: args.userInput.location,
+        spokenLanguageSkill: args.userInput.spokenLanguageSkill
       });
       const result  = await user.save()
       return{...result._doc, password:null, _id: result.id}

@@ -25,11 +25,11 @@ const singleLesson = async lessonId => {
 }
 
 const user = async userId => {
-	console.log(userId);
+	// console.log(userId);
 	
 	try {
 		const user = await User.findById(userId)
-		console.log(user);
+		// console.log(user);
 		
 		return {
 			...user._doc,
@@ -103,7 +103,7 @@ const transformCompletedLesson = async completedLesson => {
 }
 
 const transformCompletedQuestion = async completedQuestion =>{
-	console.log(completedQuestion._doc);
+	// console.log(completedQuestion._doc);
 	
 	let question = await transformQuestion.bind(this, completedQuestion._doc.question)	
 	let transformedUser = await user.bind(this, completedQuestion._doc.user._id)

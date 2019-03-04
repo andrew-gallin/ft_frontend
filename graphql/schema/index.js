@@ -47,6 +47,12 @@ module.exports = buildSchema(`
     password: String
     createdLessons: [Lesson!]
     createdQuestions: [Question!]
+    spokenLanguageSkill: [LanguageSkill!]
+  }
+
+  type LanguageSkill{
+    language: String!
+    rating: Float!
   }
 
   type AuthData{
@@ -55,10 +61,18 @@ module.exports = buildSchema(`
     tokenExpiration: Int!
   }
 
+  input LanguageSkillInput{
+    language: String!
+    rating: Float!
+  }
+
   input UserInput{
     username: String!
     email: String!
     password: String!
+    location: String!
+    spokenLanguageSkill: [LanguageSkillInput!]
+    learningLanguageSkill: [LanguageSkillInput!]
   }
 
   input CompletedQuestionInput{
