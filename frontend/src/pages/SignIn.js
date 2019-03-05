@@ -21,9 +21,7 @@ import SkillRater from '../components/Forms/SkillRater'
 import MaterialLocation from '../components/Forms/MaterialLocation'
 
 import './SignIn.css'
-const backendURL = 'http://localhost:8000/graphql'
 const finalStep = 2
-const { objArrayToString } = require('../helpers/objArrayToString')
 const { signInSignUp } = require('../helpers/signInSignUp')
 
 const styles = theme => ({
@@ -171,7 +169,8 @@ class SignIn extends Component {
       }
       return newSuggestions
     }
-    //Handles ratings created with Skill Rater. learning is a bool
+    //Handles ratings created with Skill Rater. Updates language object in array with new rating 
+    //or language. arg learning is a bool
     handleLanguageRating = (languageRating, index, learning) => {
       
       const {languages_learning, languages_spoken} = this.state
@@ -307,7 +306,6 @@ class SignIn extends Component {
         this.nextStep()
         return;
       }
-
   }
 
   render(){
