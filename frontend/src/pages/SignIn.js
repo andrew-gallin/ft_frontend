@@ -15,15 +15,13 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Icon from '@material-ui/core/Icon';
 import green from '@material-ui/core/colors/green';
 
-
 import AuthContext from '../context/auth-context'
 import SkillRater from '../components/Forms/SkillRater'
 import MaterialLocation from '../components/Forms/MaterialLocation'
-
 import './SignIn.css'
+
 const finalStep = 2
 const { signInSignUp } = require('../helpers/signInSignUp')
-
 const styles = theme => ({
   main: {
     width: 'auto',
@@ -119,23 +117,13 @@ class SignIn extends Component {
     }
 
     nextStep = () => {
-        const { signUpStep } = this.state
-        this.setState({
-            signUpStep: signUpStep + 1
-        })
+        this.setState({signUpStep: this.state.signUpStep + 1})
     }
-
     prevStep = () => {
-        const { signUpStep } = this.state
-        this.setState({
-            signUpStep: signUpStep - 1
-        })
+        this.setState({signUpStep: this.state.signUpStep - 1})
     }
-
     handleLocation = (suggestion) => {
-        this.setState({
-            location: suggestion.description
-        })
+        this.setState({location: suggestion.description})
     }
 
     updateSuggestions = (languageRating, index, learning) => {
@@ -159,7 +147,6 @@ class SignIn extends Component {
             addedLanguage = {label: languages_spoken[index].language} 
             newSuggestions.push(addedLanguage)
           }
-          
         }else{
           newSuggestions = newSuggestions.filter((value, index) => {
             return value.label !== languageRating.language
@@ -198,9 +185,7 @@ class SignIn extends Component {
 
     addLanguage= (learning) =>{
       const {languages_learning, languages_spoken } = this.state
-      console.log('working')
       if(learning){
-        console.log(languages_learning[languages_learning.length-1].language)
         if(languages_learning[languages_learning.length-1].language == null){
           return null
         }
@@ -209,9 +194,7 @@ class SignIn extends Component {
         this.setState ({
           languages_learning: new_languages_learning
         })
-      }else{
-        console.log(languages_spoken[languages_spoken.length -1]);
-        
+      }else{      
         if(languages_spoken[languages_spoken.length -1].language == null){
           return null
         }
@@ -297,7 +280,6 @@ class SignIn extends Component {
           languages_learning: filtered_languages_learning,
           languages_spoken: filtered_languages_spoken
         }
-        //this.submitHandler(obj)
         let loginData = await signInSignUp(obj, this.state.isLogin)
         this.context.login(loginData.login.token, loginData.login.userId, loginData.login.tokenExpiration)
         
