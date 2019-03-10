@@ -48,8 +48,8 @@ class App extends Component {
                 {!this.state.token && <Route path ="/auth" component={SignInPage} />}
                 {/* {!this.state.token && <Redirect to="/auth" exact />} */}
                 <Route path ="/lessons" component={LessonsPage} />
-                <Route path ="/create-lesson" component={CreateLessonPage} />
-                <Route path ="/text-lesson" component={CreateTextLesson} />
+                {/* <Route path ="/create-lesson" component={CreateLessonPage} /> */}
+                <Route path ="/create-lesson" component={CreateTextLesson} />
                 <Route path ="/profile" component={Profile} />
                 <Route path="/lesson/:id" component={SingleLesson}/>
               </Switch>

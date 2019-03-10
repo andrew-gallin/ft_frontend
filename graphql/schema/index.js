@@ -110,6 +110,7 @@ module.exports = buildSchema(`
     lesson(id: String): Lesson 
     completedLessons: [CompletedLesson!]
     users: [User!]
+    user(id: String): User 
     login(email: String!, password: String!): AuthData!
   }
 

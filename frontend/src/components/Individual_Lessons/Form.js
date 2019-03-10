@@ -33,6 +33,7 @@ class LessonForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.submitValidation = this.submitValidation.bind(this)
+        this.lessonReset = this.lessonReset.bind(this)
 
         this.state = {
             value: '',
@@ -69,6 +70,9 @@ class LessonForm extends Component {
             }
         })
       } 
+    lessonReset(){
+        window.location.reload();
+    }
 
     async handleSubmit(event){
         event.preventDefault();
@@ -148,7 +152,7 @@ class LessonForm extends Component {
         <LessonCreator updateQuestions={this.updateQuestions}></LessonCreator>
         <Modal open={this.state.modal}  closeModal={this.closeModal} response={this.state.modalHeader}> 
           <p>{this.state.modalText}</p>
-          <Button>All Set</Button>
+          <Button onClick={this.lessonReset}>All Set</Button>
         </Modal>
         {/* Error Modal */}
         <Modal open={this.state.errorModal.open}  closeModal={this.closeModal} response={this.state.errorModal.modalHeader}> 

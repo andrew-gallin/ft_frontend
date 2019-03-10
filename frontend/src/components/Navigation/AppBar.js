@@ -163,28 +163,6 @@ class PrimarySearchAppBar extends React.Component {
           <MenuItem onClick={context.logout}>Logout</MenuItem>
         </React.Fragment>
       )}
-        {/* <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem> */}
       </Menu>
     );
 
@@ -204,7 +182,7 @@ class PrimarySearchAppBar extends React.Component {
                             <NavLink to="/create-lesson">Create Lessons</NavLink>
                         </Typography>
                         
-                        <div className={classes.search}>
+                        {/* <div className={classes.search}>
                         <div className={classes.searchIcon}>
                             <SearchIcon />
                         </div>
@@ -215,7 +193,7 @@ class PrimarySearchAppBar extends React.Component {
                             input: classes.inputInput,
                             }}
                         />
-                        </div>
+                        </div> */}
                         {context.token && (
                             <React.Fragment>
                                 <li>
