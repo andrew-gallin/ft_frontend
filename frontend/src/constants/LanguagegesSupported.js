@@ -1,5 +1,5 @@
 module.exports = [
     'English (US)',
-    'Portugues (BRA)',
-    'Spanish (Mex)'
+    'Portuguese (BRA)',
+    'Spanish (MEX)'
 ]

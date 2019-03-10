@@ -68,7 +68,7 @@ export class FTCard extends Component {
 						avatar={
 							<Avatar aria-label="Recipe" className={classes.avatar}>
 								AG
-              </Avatar>
+            				</Avatar>
 						}
 						action={
 							<IconButton>
@@ -79,7 +79,7 @@ export class FTCard extends Component {
 						subheader="September 14, 2016"
 					/>
 					<CardMedia
-						cla ssName={classes.media}
+						className={classes.media}
 						image="/static/images/cards/paella.jpg"
 						title="Paella dish"
 					/>

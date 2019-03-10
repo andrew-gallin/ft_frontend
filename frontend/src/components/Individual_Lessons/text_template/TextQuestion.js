@@ -49,7 +49,7 @@ export class TextQuestion extends Component {
                 <FormsyText type="text" id="incorrect_answer_3" label= "Wrong Answer" name="incorrect_answer3" value = {props.question.incorrect_answers[2] || null}></FormsyText>
             </div>
             <div className="submit_question">
-                <Button type="submit" disabled={!this.state.canSubmit}>Submit Question!</Button>
+                <Button type="submit" variant="contained" color="primary" disabled={!this.state.canSubmit}>Submit Question!</Button>
             </div>
       </Formsy>
     )

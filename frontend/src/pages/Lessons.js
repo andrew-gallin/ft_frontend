@@ -6,8 +6,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-
-const backendURL = 'http://localhost:8000/graphql'
+const { backendCall } = require('../helpers/backendCall')
 
 const styles = theme => ({
   root:{
@@ -59,19 +58,8 @@ class LessonsPage extends Component {
     }
 
     //send to the backend
-    //TODO: replace with abstraction of backendCall
     try{
-      let res = await fetch(backendURL, {
-        method: 'POST',
-        body: JSON.stringify(requestBody),
-        headers:{
-          'Content-Type': 'application/json'
-        }
-      })
-      if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Failed!')
-        }
-      let resData = await res.json();
+      let resData = await backendCall(requestBody);
       this.setState({lessons: resData.data.lessons, isLoading:false})
     }catch(err) {
       console.log(err)
@@ -98,7 +86,7 @@ class LessonsPage extends Component {
           <h3>In Progress</h3>
           <hr className={classes.hr}></hr>
           {lessons.slice(0,3).map(lesson =>
-            <Grid item xs={12} className='grid-item'>
+            <Grid item xs={12}  key={lesson._id} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
                 <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
               </NavLink>
@@ -109,7 +97,7 @@ class LessonsPage extends Component {
           <h3>Next Steps</h3>
           <hr className={classes.hr}></hr>
           {lessons.slice(10,17).map(lesson =>
-            <Grid item xs={12} className='grid-item'>
+            <Grid item xs={12} key={lesson._id} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
                 <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
               </NavLink>
@@ -120,7 +108,7 @@ class LessonsPage extends Component {
           <h3>Help Others</h3>
           <hr className={classes.hr}></hr>
           {lessons.slice(20,35).map(lesson =>
-            <Grid item xs={12} className='grid-item'>
+            <Grid item xs={12} key={lesson._id} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
                 <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
               </NavLink>
@@ -129,10 +117,6 @@ class LessonsPage extends Component {
         </Grid>
       </Grid>
     </div>
-    //Header Should be a "reccomended for you carosuel"
-    //below that, buttons that launch into a guided next lesson selection choice (courses)
-    //below that should be tumbnails of individual lessons searchable/sortable by various factors
-    //Body shuld be a searchable tiles
     )
   }
 }

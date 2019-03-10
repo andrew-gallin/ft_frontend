@@ -13,16 +13,20 @@ module.exports = {
 		}		 
 	},
 
-	lessons: () => {
-		return Lesson.find()
-			.populate('author')
-			.then(lessons => {
-				return lessons.map(lesson => {
-					return transformLesson(lesson);
-				})
-			}).catch(err => {
-				throw err
+	lessons: async (args, req) =>{
+		try{
+			let findObj = {}
+			args.promptLanguage ? findObj.promptLanguage = args.promptLanguage : null
+			args.answerLanguage ? findObj.answerLanguage = args.answerLanguage : null
+
+			let lessons = await Lesson.find(findObj).populate('author')
+			lessons = lessons.map(lesson => {
+				return transformLesson(lesson);
 			})
+			return lessons
+		}catch (err) {
+			throw err
+		}		 
 	},
 	createLesson: async (args, req) => {
 		// if (!req.isAuth){

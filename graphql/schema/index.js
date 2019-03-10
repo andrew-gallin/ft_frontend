@@ -106,7 +106,7 @@ module.exports = buildSchema(`
   }
 
   type RootQuery {
-    lessons: [Lesson!]!
+    lessons(promptLanguage: String, answerLanguage: String): [Lesson!]!
     lesson(id: String): Lesson 
     completedLessons: [CompletedLesson!]
     users: [User!]
