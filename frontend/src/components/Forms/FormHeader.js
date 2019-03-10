@@ -133,7 +133,7 @@ class LessonHeader extends React.Component {
             ))}
           </Select>
         </FormControl>
-            <FormGroup controlId="formControlsSelect" className={classes.difficulty}>
+            <FormGroup controlid="formControlsSelect" className={classes.difficulty}>
                 <InputLabel>Difficulty</InputLabel>
                 <SimpleSlider step={5} handleChange={this.handleSliderChange} value={this.state.difficultyValue}></SimpleSlider>
             </FormGroup>

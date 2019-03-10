@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import { Carousel } from 'react-bootstrap';
 import TextQuestion from './text_template/text_question'
-import { log } from 'util';
 
 const placeholderQuestion ={
     prompt: '',
     answer: '',
     incorrect_answers: ['', '', '']
 }
-
-const consolidateFormDataNames = ['incorrect_answer']
 
 export default class LessonCreator extends Component {
     constructor(props, context) {
