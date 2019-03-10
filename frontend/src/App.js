@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 
 import SignInPage from './pages/SignIn';
 import LessonsPage from './pages/Lessons';
-import CreateLessonPage from './pages/CreateLesson';
 import CreateTextLesson from './pages/CreateTextLesson';
 import AppBar from './components/Navigation/AppBar'
 import AuthContext from './context/auth-context'

@@ -4,13 +4,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
@@ -129,7 +127,6 @@ class PrimarySearchAppBar extends React.Component {
       {!context.token && (
         <div>
           <MenuItem onClick={this.handleMenuClose}><NavLink to="/auth">Login</NavLink></MenuItem>
-          <MenuItem onClick={this.handleMenuClose}><NavLink to="/profile">Profile</NavLink></MenuItem>
         </div>
         )}
       {context.token && (
@@ -153,7 +150,6 @@ class PrimarySearchAppBar extends React.Component {
       {!context.token && (
         <React.Fragment>
           <MenuItem onClick={this.handleMenuClose}><NavLink to="/auth">Login</NavLink></MenuItem>
-          <MenuItem onClick={this.handleMenuClose}><NavLink to="/profile">Profile</NavLink></MenuItem>
         </React.Fragment>
         )}
       {context.token && (
@@ -194,25 +190,8 @@ class PrimarySearchAppBar extends React.Component {
                             }}
                         />
                         </div> */}
-                        {context.token && (
-                            <React.Fragment>
-                                <li>
-                                <button onClick={context.logout}>Logout</button>
-                                </li>
-                            </React.Fragment>
-                        )}
                         <div className={classes.grow} />
                         <div className={classes.sectionDesktop}>
-                        {/* <IconButton color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                            <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={17} color="secondary">
-                            <NotificationsIcon />
-                            </Badge>
-                        </IconButton> */}
                         <IconButton
                             aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                             aria-haspopup="true"

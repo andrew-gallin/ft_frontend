@@ -44,6 +44,31 @@ exports.requestBodyBuilder = (requestBodyParams, type) => {
             `
         }
     }
+    if (type === "user"){
+        requestBody = {
+            query: `
+            query{
+                user(id:"${requestBodyParams.userID}"){
+                  username
+                  email
+                  createdLessons{
+                    title
+                  }
+                  spokenLanguageSkill{
+                    language
+                    rating
+                  }
+                  learningLanguageSkill{
+                    language
+                    rating
+                  }
+                }
+              }
+              
+            `
+          }
+
+    }
 
     return requestBody
 }

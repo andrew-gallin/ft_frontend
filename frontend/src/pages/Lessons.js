@@ -6,7 +6,13 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
+import  AuthContext  from '../context/auth-context'
+
+
 const { backendCall } = require('../helpers/backendCall')
+const { requestBodyBuilder } = require('../helpers/requestBodyBuilder')
+
+
 
 const styles = theme => ({
   root:{
@@ -32,22 +38,45 @@ const styles = theme => ({
 });
 
 class LessonsPage extends Component {
+
+  static contextType = AuthContext
+
   constructor(props) {
     super(props)
   
     this.state = {
        lessons:[],
        isLoading: false,
-       error: null
+       error: null, 
+       user: null
     }
   }
   
   async componentDidMount(){
     this.setState({isLoading: true})
-    let requestBody = {
+    let requestObj = {
+      userID: this.context.userId
+    }
+    let requestBody = requestBodyBuilder(requestObj, 'user')
+    
+
+    try {
+      let resData = await backendCall(requestBody);
+      this.setState({
+        user:resData
+      });
+      
+      this.setState({})
+    } catch (error) {
+      
+    }
+    let answerLanguage = "Portuguese (BRA)"
+    let promptLanguage = "English (US)"
+    // this.state.user.spokenLanguageSkill ? spokenLanguage = this.state.user.spokenLanguageSkill[0].language : spokenLanguage=null   
+    requestBody = {
       query: `
-        query {
-          lessons{
+        query{
+        lessons(promptLanguage:"${promptLanguage}", answerLanguage:"${answerLanguage}") {
             _id
             title
             promptLanguage
@@ -85,7 +114,7 @@ class LessonsPage extends Component {
         <Grid item xs={12} sm={4}>
           <h3>In Progress</h3>
           <hr className={classes.hr}></hr>
-          {lessons.slice(0,3).map(lesson =>
+          {lessons.slice(0,10).map(lesson =>
             <Grid item xs={12}  key={lesson._id} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
                 <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
