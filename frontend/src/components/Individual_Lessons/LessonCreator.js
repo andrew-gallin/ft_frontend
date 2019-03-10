@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Carousel } from 'react-bootstrap';
-import TextQuestion from './text_template/text_question'
+import TextQuestion from './text_template/TextQuestion'
+
 
 const placeholderQuestion ={
     prompt: '',
