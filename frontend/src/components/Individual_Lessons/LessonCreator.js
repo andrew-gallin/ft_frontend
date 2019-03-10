@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Carousel } from 'react-bootstrap';
 import TextQuestion from './text_template/text_question'
+import { log } from 'util';
 
 const placeholderQuestion ={
     prompt: '',
     answer: '',
     incorrect_answers: ['', '', '']
 }
+
+const consolidateFormDataNames = ['incorrect_answer']
 
 export default class LessonCreator extends Component {
     constructor(props, context) {
@@ -27,22 +30,19 @@ export default class LessonCreator extends Component {
           this.setState({questions: [{}]})
       }
 
-      handleSubmit(event){
+      handleSubmit(data, resetForm, invalidateForm){
         //Gathers form data and builds object where values are arrays if the field names are shared b/w multiple values
         // otherwise it is 1:1 k:v
-        const data = new FormData(event.target);
 
-        let lesson = {}
-        let keys = new Set()
-        for (let key of data.keys()){
-            keys.add(key);
-        }
-        for (let key of keys){
-            let value = data.getAll(key)
-            value.length > 1 ? lesson[key] = value : lesson[key] = value[0]
+        for (const [key, value] of Object.entries(data)) {
+          if (Array.isArray(value)){
+            data[key] = value.filter((el) => {
+              return el !== undefined
+            })
+          } 
         }
         let questions = this.state.questions
-        questions[this.state.index] = lesson
+        questions[this.state.index] = data
         
         this.setState(
             {

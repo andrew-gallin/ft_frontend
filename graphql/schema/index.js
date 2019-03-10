@@ -48,6 +48,8 @@ module.exports = buildSchema(`
     createdLessons: [Lesson!]
     createdQuestions: [Question!]
     spokenLanguageSkill: [LanguageSkill!]
+    location: String
+    learningLanguageSkill: [LanguageSkill!]
   }
 
   type LanguageSkill{

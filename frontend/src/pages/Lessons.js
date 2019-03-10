@@ -1,7 +1,5 @@
 
 import React, { Component } from 'react';
-import Carousel from '../components/Carousel/Carousel'
-import '../components/Carousel/carousel.css';
 import './lessons.css'
 
 import Button from '@material-ui/core/Button';
@@ -94,7 +92,6 @@ class LessonsPage extends Component {
     }
     return (
     <div className="lesson-page">
-      {/* <Carousel /> */}
       <h1>The Lessons Page</h1>
       <Grid container className={this.props.classes.container} spacing={24} wrap={'nowrap'}>
         <Grid item xs={12} sm={4}>

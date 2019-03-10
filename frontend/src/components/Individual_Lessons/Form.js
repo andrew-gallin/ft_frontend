@@ -1,34 +1,47 @@
 import React, { Component } from 'react';
-import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 import './form.css'
-
-import { Carousel } from 'react-bootstrap';
-import TextQuestion from './text_template/text_question'
-
 import Modal from '../Questions/Modal'
 import LessonCreator from './LessonCreator'
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+
+import FormHeader from '../Forms/FormHeader';
+
 const { backendCall } = require('../../helpers/backendCall')
 const { requestBodyBuilder } = require('../../helpers/requestBodyBuilder')
 
-const difficulty_map ={
-    'Beginner': 0,
-    'Intermediate' : 1,
-    'Advanced': 2
-}
+const styles = theme => ({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    formControl: {
+      margin: theme.spacing.unit,
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing.unit * 2,
+    },
+  });
 
-export default class LessonForm extends Component {
+class LessonForm extends Component {
     constructor(props, context) {
         super(props, context);
-
 
         this.updateQuestions = this.updateQuestions.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.submitValidation = this.submitValidation.bind(this)
 
         this.state = {
             value: '',
             questions:[],
             modal:false,
+            submitDisabled:true,
+            errorModal:{
+                open:false
+            }
         };
     }
 
@@ -38,16 +51,41 @@ export default class LessonForm extends Component {
         })        
     }
 
+    submitValidation(){
+        this.setState({
+            submitDisabled:false
+        })
+    }
+
+    handleChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+      };
+
     closeModal(){
-        this.setState({ modal: false})
-      }
+        this.setState({ 
+            modal: false,
+            errorModal:{
+                open:false
+            }
+        })
+      } 
 
     async handleSubmit(event){
         event.preventDefault();
+        if(this.state.questions.length <= 0){
+            this.setState({
+                errorModal:{
+                    open: true,
+                    modalHeader: 'Not So Fast!',
+                    modalText: 'Please add at least one question to your lesson, but no need to stop at just one ;)'
+                }
+            })
+            return false
+        }
         //Gathers form data and builds object where values are arrays if the field names are shared b/w multiple values
         //otherwise it is 1:1 k:v
         const data = new FormData(event.target);
-
+        
         let lesson = {questions: this.state.questions}
         let keys = new Set()
         for (let key of data.keys()){
@@ -57,12 +95,12 @@ export default class LessonForm extends Component {
             let value = data.getAll(key)
             value.length > 1 ? lesson[key] = value : lesson[key] = value[0]
         }
-        lesson.difficulty = difficulty_map[lesson.difficulty];
-
+        lesson.authorID = '5c324ab59a7bb9c27c3f8eda'; //TODO - convert to user token
+        
         //TODO: Hit the Question API repeatedly (is there a way to just have the endpoint expect an array) and store the idValues of the newly created questions
         let question_Ids = []
         for (let question of lesson.questions){
-            let { prompt, answer, incorrect_answers} = question;
+            let { prompt, answer, incorrect_answers, type} = question;
             incorrect_answers = incorrect_answers.filter(el => {
                 return  el.trim() !== ""
             })
@@ -70,14 +108,13 @@ export default class LessonForm extends Component {
             let requestBodyObj = {
                 prompt: prompt,
                 answer: answer,
-                prompt_language: lesson.language,
+                prompt_language: lesson.studentLanguage,
                 incorrect_answers_string: incorrect_answers.join('", "'),
-                response_language: 'English', //this should somehow come from user metadata, more advance this can come from language detection
+                response_language: lesson.teacherLanguage, //this should somehow come from user metadata, more advance this can come from language detection
                 difficulty: lesson.difficulty,
-                type: 'text' ///this needs to come from page metadata
+                type: type 
             }
           
-            //need to test for presence of values FORM VALIDATION
             let requestBody = requestBodyBuilder(requestBodyObj, 'createQuestion')
 
             try{
@@ -91,8 +128,7 @@ export default class LessonForm extends Component {
             lesson: lesson,
             question_Ids: question_Ids
         }
-        let requestBody = requestBodyBuilder(requestBodyObj, 'createLesson')
-            
+        let requestBody = requestBodyBuilder(requestBodyObj, 'createLesson')      
             try{
                 await backendCall(requestBody);
                 this.setState({
@@ -105,41 +141,26 @@ export default class LessonForm extends Component {
             }
       }
     
-  render() {
+  render() {      
     return (
-        //TODO: Refactor this form to allow for different headers for different lesson types
       <div>
-        <form className="header_form" onSubmit={this.handleSubmit}>
-            <FormGroup controlId="formLessonTitle">
-                <ControlLabel>Lesson Title</ControlLabel>
-                <FormControl type="text" name="title" placeholder="My Lesson" />      
-            </FormGroup>
-            {' '}
-            <FormGroup controlId="formLessonHeader">
-                <ControlLabel>Lesson Language</ControlLabel>
-                <FormControl componentClass="select" name="language" placeholder="select">
-                    <option value="Portuguese">Portuguese</option>
-                    <option value="English">English</option>
-                </FormControl>
-            </FormGroup>
-            {' '}
-            <FormGroup controlId="formControlsSelect">
-                <ControlLabel>Difficulty</ControlLabel>
-                <FormControl componentClass="select" name="difficulty" placeholder="select">
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                </FormControl>
-            </FormGroup>
-
-            <Button type="submit">Finalize Lesson</Button>
-        </form>
+        <FormHeader onSubmit={this.handleSubmit} submitValidation={this.submitValidation} submitDisabled={this.state.submitDisabled}/>
         <LessonCreator updateQuestions={this.updateQuestions}></LessonCreator>
-        <Modal open={this.state.modal} closeModal={this.closeModal} response={this.state.modalHeader}> 
+        <Modal open={this.state.modal}  closeModal={this.closeModal} response={this.state.modalHeader}> 
           <p>{this.state.modalText}</p>
           <Button>All Set</Button>
+        </Modal>
+        {/* Error Modal */}
+        <Modal open={this.state.errorModal.open}  closeModal={this.closeModal} response={this.state.errorModal.modalHeader}> 
+          <p>{this.state.errorModal.modalText}</p>
         </Modal>
       </div>
     )
   }
 }
+
+LessonForm.propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
+  
+  export default withStyles(styles)(LessonForm);

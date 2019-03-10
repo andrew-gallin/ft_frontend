@@ -1,13 +1,9 @@
 import { withFormsy } from 'formsy-react';
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { withStyles, createMuiTheme } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputBase from '@material-ui/core/InputBase';
-import InputLabel from '@material-ui/core/InputLabel';
+import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
 import blue from '@material-ui/core/colors/blue';
 
 
@@ -47,6 +43,7 @@ const styles = theme => ({
     cssOutlinedLabel:{
         left:"50%",
         top:"50%",
+        whiteSpace: 'nowrap',
         transform:"translateX(-50%) translateY(-50%)"
     },
     cssShrink:{
@@ -56,16 +53,9 @@ const styles = theme => ({
     },
     cssShrinkIncorrectA:{
         '&$cssOutlinedLabel':{
-            transform: "translateX(-64%) translateY(-210%) scale(0.75)"
+            transform: "translateX(-80%) translateY(-210%) scale(0.75)"
         }
     }
-  });
-
-  const theme = createMuiTheme({
-    palette: {
-      primary: green,
-    },
-    typography: { useNextVariants: true },
   });
 
 class FormsyText extends Component {
@@ -87,10 +77,9 @@ class FormsyText extends Component {
     const errorMessage = this.props.getErrorMessage();
     const { classes, name } = this.props;
     let shrink = classes.cssShrink
-    if(name === "incorrect_answers"){
+    if(name.includes("incorrect_answer")){
         shrink = classes.cssShrinkIncorrectA
     } 
-    console.log(name, shrink);
     
     return (
         <div className={classes.root}>
@@ -113,15 +102,14 @@ class FormsyText extends Component {
                 root: classes.cssOutlinedInput,
                 focused: classes.cssFocused,
                 notchedOutline: classes.notchedOutline,
-                shrink: classes.cssShrink
             },
             }}
-            label={this.props.name}
+            label={this.props.label}
             variant="outlined"
             id="custom-css-outlined-input"
-            inputStyle={{ textAlign: 'center' }}
-            hintStyle={{ textAlign: 'center', width: '100%' }}
-            floatingLabelStyle={{ textAlign: 'center', width: '100%', transformOrigin: 'center top 0px' }}
+            inputstyle={{ textAlign: 'center' }}
+            hintstyle={{ textAlign: 'center', width: '100%' }}
+            floatinglabelstyle={{ textAlign: 'center', width: '100%', transformOrigin: 'center top 0px' }}
             // labelWidth="40"
         />
         <br></br>

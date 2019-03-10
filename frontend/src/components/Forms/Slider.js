@@ -6,14 +6,17 @@ import Slider from '@material-ui/lab/Slider';
 
 const styles = theme => ({
   root: {
-    width: `35%`,
-    marginLeft: `${theme.spacing.unit * 3}px`
+    width: `100%`,
   },
   slider: {
-    padding: '13.25px 0px',
+    padding: '8px 0px',
   },
 });
 
+//Takes in the props:
+//step : The size of the group you want the slider to jump by
+//value: default value for slider
+//onChange: handler for change
 class SimpleSlider extends React.Component {
   render() {
     const { classes } = this.props;
@@ -21,8 +24,9 @@ class SimpleSlider extends React.Component {
     this.props.step ? step = this.props.step : step = null
 
     return (
-      <div className={classes.root}>
+      <div className={classes.root} id="slider">
         <Typography id="label">{this.props.value}</Typography>
+        <input type="hidden" name="difficulty" value={this.props.value}></input>
         <Slider
           classes={{ container: classes.slider }}
           value={this.props.value}

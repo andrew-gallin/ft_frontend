@@ -9,9 +9,16 @@ import Slider from './Slider'
 const styles = theme => ({
     root: {
       display: 'flex',
-      alignItems: 'flex-end',
+      alignItems: 'center',
       textAlign: 'center'
     },
+    slider:{
+      width: '35%',
+    },
+    textField: {
+      marginRight: `${theme.spacing.unit * 3}px`,
+      width: '100%'
+    }
   });
 
 export class SkillRater extends Component {
@@ -35,9 +42,7 @@ export class SkillRater extends Component {
         language: language !== null ? language.value : null
       })
       this.props.handleLanguageRating({language: (language !== null ? language.value : null), value: this.state.value}, this.props.index, this.props.learning)
-    }
-  
-    
+    }    
     
   render() {
     const { classes } = this.props;
@@ -45,8 +50,12 @@ export class SkillRater extends Component {
     this.props.step ? step = this.props.step : step = null    
     return (
       <div className={classes.root}>
-        <AutocompleteTextField handleLanguage={this.handleLanguage} suggestions={this.props.suggestions}/>
-        <Slider step={step} value={this.state.value} handleChange={this.handleChange}/>
+        <div className={classes.textField} >
+          <AutocompleteTextField handleLanguage={this.handleLanguage} suggestions={this.props.suggestions}/>
+        </div>
+        <div className={classes.slider}>
+          <Slider step={step} value={this.state.value} handleChange={this.handleChange}/>
+        </div>
       </div>
     )
   }

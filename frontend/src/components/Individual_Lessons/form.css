@@ -1,7 +1,9 @@
 .form-group{
     width: 25%;
-    display: inline-block;
+    display: flex;
     text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
 .item,

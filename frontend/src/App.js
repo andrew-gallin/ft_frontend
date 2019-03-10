@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 
-import AuthPage from './pages/Auth';
 import SignInPage from './pages/SignIn';
 import LessonsPage from './pages/Lessons';
 import CreateLessonPage from './pages/CreateLesson';
@@ -14,8 +13,6 @@ import Footer from './components/Navigation/Footer'
 import './App.css';  
 import './components/Carousel/carousel.css'
 import SingleLesson from './pages/SingleLesson';
-
-
 
 class App extends Component {
   state ={

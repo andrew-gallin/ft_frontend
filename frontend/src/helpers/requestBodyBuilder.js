@@ -25,8 +25,8 @@ exports.requestBodyBuilder = (requestBodyParams, type) => {
         requestBody = {
             query: `
             mutation{
-                createLesson(lessonInput:{title:"${requestBodyParams.lesson.title}", author:"5c324ab59a7bb9c27c3f8eda", description:"I'm hungry", 
-                promptLanguage:"${requestBodyParams.lesson.language}",  answerLanguage:"English", difficulty:${requestBodyParams.lesson.difficulty}, questions:["${requestBodyParams.question_Ids.join('", "')}"]}){
+                createLesson(lessonInput:{title:"${requestBodyParams.lesson.title}", author:"${requestBodyParams.lesson.authorID}", description:"I'm hungry", 
+                promptLanguage:"${requestBodyParams.lesson.studentLanguage}",  answerLanguage:"${requestBodyParams.lesson.teacherLanguage}", difficulty:${requestBodyParams.lesson.difficulty}, questions:["${requestBodyParams.question_Ids.join('", "')}"]}){
                     _id
                     title
                         createdOn

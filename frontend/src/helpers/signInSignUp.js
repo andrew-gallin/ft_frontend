@@ -29,7 +29,7 @@ export async function signInSignUp(userObj, isLogin) {
          `
        }
        try{
-        let resData =  await backendCall(requestBody);
+        await backendCall(requestBody);
         let loginBody = {
             query: `
               query {
@@ -54,13 +54,4 @@ export async function signInSignUp(userObj, isLogin) {
         }
     }
     return loginData.data
-
-    // .then(resData => {
-    //   if(resData.data.login.token){
-    //     this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration)
-    //   }
-    // })
-    // .catch(err => {
-    //   console.log(err)
-    // })
 } 

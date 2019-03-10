@@ -39,7 +39,7 @@ module.exports = {
 		try {
 			const result = await question.save()
 			createdQuestion = transformQuestion(result);
-			const author = await User.findById(req.userId || '5c324ab59a7bb9c27c3f8eda')
+			const author = await User.findById(req.userId || '5c7db926f1368b3ac50525b5')
 			if (!author) {
 				throw new Error('User not found')
 			}
