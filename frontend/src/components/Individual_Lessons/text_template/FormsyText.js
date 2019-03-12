@@ -18,7 +18,7 @@ const styles = theme => ({
     //controls default
     cssLabel: {
       '&$cssFocused': {
-        color: purple[100],
+        color: purple[500],
         fontSize:"1rem",
         
       },
