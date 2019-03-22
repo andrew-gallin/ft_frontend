@@ -8,11 +8,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import  AuthContext  from '../context/auth-context'
 
-
 const { backendCall } = require('../helpers/backendCall')
 const { requestBodyBuilder } = require('../helpers/requestBodyBuilder')
-
-
+const { lessonSort } = require('../helpers/lessonSort')
+const { lessonGather } = require('../helpers/lessonGather')
 
 const styles = theme => ({
   root:{
@@ -48,48 +47,53 @@ class LessonsPage extends Component {
        lessons:[],
        isLoading: false,
        error: null, 
-       user: null
+       user: null,
+       reccomended: [],
+       keepPracticing: []
     }
   }
   
   async componentDidMount(){
     this.setState({isLoading: true})
+
+    ///Gather User info
     let requestObj = {
       userID: this.context.userId
     }
     let requestBody = requestBodyBuilder(requestObj, 'user')
-    
-
     try {
       let resData = await backendCall(requestBody);
       this.setState({
-        user:resData
+        user:resData.data
       });
-      
-      this.setState({})
     } catch (error) {
-      
+      console.log(error)
     }
-    let answerLanguage = "Portuguese (BRA)"
-    let promptLanguage = "English (US)"
-    // this.state.user.spokenLanguageSkill ? spokenLanguage = this.state.user.spokenLanguageSkill[0].language : spokenLanguage=null   
-    requestBody = {
-      query: `
-        query{
-        lessons(promptLanguage:"${promptLanguage}", answerLanguage:"${answerLanguage}") {
-            _id
-            title
-            promptLanguage
-            difficulty
-          }
-        }
-      `
-    }
-
-    //send to the backend
+    
+    ///Lesson call function
     try{
-      let resData = await backendCall(requestBody);
-      this.setState({lessons: resData.data.lessons, isLoading:false})
+      let resData = await lessonGather(this.context, this.state.user);
+      await console.log(resData);
+      
+      console.log(this.state.user, this.context.userId);
+      
+      this.setState({
+        lessons: resData.lessons,
+        reccomended: resData.lessons, 
+        completedLessons: resData.completedLessons, 
+        isLoading:false
+      })
+      
+      ///Lesson sort function
+      if(this.context.userId){
+        let sortedLessons = await lessonSort(resData.lessons, this.state.user, resData.completedLessons)
+        console.log(sortedLessons);
+        this.setState({
+          reccomended: sortedLessons.reccomended,
+          keepPracticing: sortedLessons.keepPracticing
+        })
+      }
+
     }catch(err) {
       console.log(err)
       this.setState({ error: err, isLoading:false})
@@ -97,7 +101,7 @@ class LessonsPage extends Component {
   }
   
   render(){
-    const { lessons, isLoading, error } = this.state;
+    const { lessons, isLoading, error, reccomended, keepPracticing } = this.state;
     const { classes } = this.props;
     
     if(error){
@@ -107,6 +111,7 @@ class LessonsPage extends Component {
     if (isLoading) {
       return <p>Loading ...</p>;
     }
+
     return (
     <div className="lesson-page">
       <h1>The Lessons Page</h1>
@@ -114,7 +119,7 @@ class LessonsPage extends Component {
         <Grid item xs={12} sm={4}>
           <h3>In Progress</h3>
           <hr className={classes.hr}></hr>
-          {lessons.slice(0,10).map(lesson =>
+          {reccomended.slice(0,10).map(lesson =>
             <Grid item xs={12}  key={lesson._id} className='grid-item'>
               <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
                 <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
@@ -125,10 +130,10 @@ class LessonsPage extends Component {
         <Grid item xs={12} sm={4} >
           <h3>Next Steps</h3>
           <hr className={classes.hr}></hr>
-          {lessons.slice(10,17).map(lesson =>
-            <Grid item xs={12} key={lesson._id} className='grid-item'>
-              <NavLink to={`/lesson/${lesson._id}`} key={lesson._id}>
-                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{lesson.title}</Button>
+          {keepPracticing.slice(0,10).map(keepPracticingLesson =>
+            <Grid item xs={12} key={keepPracticingLesson._id} className='grid-item'>
+              <NavLink to={`/lesson/${keepPracticingLesson._id}`} key={keepPracticingLesson._id}>
+                <Button variant="contained" color="primary" className={this.props.classes.lessonButton}>{keepPracticingLesson.lesson.title}</Button>
               </NavLink>
             </Grid>
           )}
