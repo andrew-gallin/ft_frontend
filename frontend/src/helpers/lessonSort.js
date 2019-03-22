@@ -19,7 +19,6 @@ exports.lessonSort = (lessonsArr, user, completedLessonArr = null) =>{
         keepPracticing:[]
     }
 
-    console.log(completedLessonArr);
     
     if (completedLessonArr != null){
         sortedLessons.reccomended = neverCompletedLessonArrBuilder(lessonsArr, completedLessonArr)
