@@ -13,18 +13,20 @@
 
 
 //Inital call to lessons
-exports.lessonSort = (lessonsArr, user, completedLessonArr = null) =>{
+exports.lessonSort = (lessonsArr, user = null, completedLessonArr = null) =>{
     let sortedLessons = {
         reccomended: [],
         keepPracticing:[]
     }
-
+    sortedLessons.reccomended = lessonsArr
     
     if (completedLessonArr != null){
         sortedLessons.reccomended = neverCompletedLessonArrBuilder(lessonsArr, completedLessonArr)
-        sortedLessons.keepPracticing = completedLessonArr
+        sortedLessons.keepPracticing = sortRecomendedLessons(completedLessonArr, user)
     }
-    
+
+    sortedLessons.reccomended =  sortRecomendedLessons(sortedLessons.reccomended, user)
+
     return sortedLessons
 }
 
@@ -37,4 +39,17 @@ function neverCompletedLessonArrBuilder(lessonsArr, completedLessonArr){
         })
     })
     return newLessons
+}
+//takes an array of lesson objects and sorts it by absolute difference to
+function sortRecomendedLessons(lessonArr, user){
+    let skill = 0
+    user != null ? user.learningLanguageSkill[0] != null ? skill = user.learningLanguageSkill[0].rating : skill = 0 : skill = 0
+    console.log(skill, lessonArr);
+    
+    let sorted = lessonArr.sort((a,b) => {
+        let aDif = Math.abs(skill - a.difficulty)
+        let bDif = Math.abs(skill - b.difficulty)
+        return aDif > bDif ? 1 : aDif < bDif ? -1 : 0;
+    })
+    return sorted
 }

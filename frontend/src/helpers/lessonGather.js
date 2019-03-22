@@ -9,7 +9,8 @@ export async function lessonGather(context, user = null){
 
     let answerLanguage = "English (US)"
     let promptLanguage = "Portuguese (BRA)"
-    user.spokenLanguageSkill ? answerLanguage = user.spokenLanguageSkill[0].language : answerLanguage="English (US)"   
+    user != null ? user.spokenLanguageSkill[0] != null ? answerLanguage = user.spokenLanguageSkill[0].language : answerLanguage="English (US)"  : answerLanguage="English (US)"
+    
     
     let lessonObj = {
         lessons: null,

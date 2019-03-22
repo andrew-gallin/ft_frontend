@@ -65,16 +65,17 @@ class LessonsPage extends Component {
     try {
       let resData = await backendCall(requestBody);
       this.setState({
-        user:resData.data
+        user:resData.data.user
       });
     } catch (error) {
       console.log(error)
     }
     
     ///Lesson call function
+    console.log(this.state.user);
+
     try{
       let resData = await lessonGather(this.context, this.state.user); 
-      console.log(resData);
            
       this.setState({
         lessons: resData.lessons,
@@ -82,16 +83,13 @@ class LessonsPage extends Component {
         completedLessons: resData.completedLessons, 
         isLoading:false
       })
+
       
-      ///Lesson sort function
-      if(this.context.userId){
-        let sortedLessons = await lessonSort(resData.lessons, this.state.user, resData.completedLessons)
+      let sortedLessons = await lessonSort(resData.lessons, this.state.user, resData.completedLessons)
         this.setState({
           reccomended: sortedLessons.reccomended,
           keepPracticing: sortedLessons.keepPracticing
         })
-      }
-
     }catch(err) {
       console.log(err)
       this.setState({ error: err, isLoading:false})
