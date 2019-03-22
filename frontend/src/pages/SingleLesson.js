@@ -7,6 +7,8 @@ import { Carousel } from 'react-bootstrap';
 import '../components/Carousel/carousel.css';
 import './SingleLesson.css'
 import { Button } from '@material-ui/core';
+import  AuthContext  from '../context/auth-context'
+
 const { backendCall } = require('../helpers/backendCall')
 const {objArrayToString } = require('../helpers/objArrayToString')
 const shuffle = require('knuth-shuffle').knuthShuffle;
@@ -15,6 +17,9 @@ const correctAnswerResponses =["Stay gold pony boy!", "You Rock!", "More majesti
 const incorrectAnswerResponses = ["Nope", "Maybe try again", "Well at least you know which one it's not"]
 
 export default class SingleLesson extends Component {
+
+  static contextType = AuthContext
+
     constructor(props) {
       super(props)
       
@@ -30,7 +35,7 @@ export default class SingleLesson extends Component {
         complete: false,
         modalText: 'placeholder',
         questionData:[], 
-        userId: "5c2fe0236f2bc3014e8405f0",
+        userId:  "5c2fe0236f2bc3014e8405f0",
         modalHeader: "",
         recentAnswerCorrect:null,
       }
@@ -45,6 +50,8 @@ export default class SingleLesson extends Component {
     
     async componentDidMount(){
         this.setState({isLoading: true})
+        console.log(this.context);
+        
         let requestBody = {
           query: `
             query{
@@ -69,6 +76,7 @@ export default class SingleLesson extends Component {
               lesson.questions[index].possibleAnswers = shuffle(lesson.questions[index].incorrectAnswers.concat(lesson.questions[index].answer))
             });
             this.setState({lesson: lesson, 
+                          userId: this.context.userId,
                           isLoading:false,
                           accessibleQuestions: [lesson.questions[0]]});
             window.responsiveVoice.speak(this.state.accessibleQuestions[0].prompt, "Brazilian Portuguese Female")

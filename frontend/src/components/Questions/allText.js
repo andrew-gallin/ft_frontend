@@ -18,6 +18,11 @@ const itemStyle = {
 
 }
 
+const containerStyle = {
+  marginBottom: '4rem',
+
+}
+
 //All text expects a lesson object prop with an array of possible questions and a prompt
 //This Component expects a handler to be passed into trigger correct or incorrect answer clicks
 //This component is aware of which is the answer
@@ -39,7 +44,7 @@ export class AllText extends Component {
   render() {
     return (
       <div>
-          <Grid container spacing={24} alignItems="center" justify="center">
+          <Grid container style={containerStyle} spacing={24} alignItems="center" justify="center">
             <Grid item xs ={12} style={style}>
                 <h1>{this.props.prompt}</h1>
             </Grid>

@@ -60,6 +60,7 @@ class LessonsPage extends Component {
     let requestObj = {
       userID: this.context.userId
     }
+    
     let requestBody = requestBodyBuilder(requestObj, 'user')
     try {
       let resData = await backendCall(requestBody);
@@ -72,11 +73,9 @@ class LessonsPage extends Component {
     
     ///Lesson call function
     try{
-      let resData = await lessonGather(this.context, this.state.user);
-      await console.log(resData);
-      
-      console.log(this.state.user, this.context.userId);
-      
+      let resData = await lessonGather(this.context, this.state.user); 
+      console.log(resData);
+           
       this.setState({
         lessons: resData.lessons,
         reccomended: resData.lessons, 
@@ -87,7 +86,6 @@ class LessonsPage extends Component {
       ///Lesson sort function
       if(this.context.userId){
         let sortedLessons = await lessonSort(resData.lessons, this.state.user, resData.completedLessons)
-        console.log(sortedLessons);
         this.setState({
           reccomended: sortedLessons.reccomended,
           keepPracticing: sortedLessons.keepPracticing

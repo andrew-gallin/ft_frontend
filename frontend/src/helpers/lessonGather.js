@@ -41,7 +41,7 @@ export async function lessonGather(context, user = null){
         requestBody = {
           query: `
             query{
-                completedLessons(userID:"5c2fe0236f2bc3014e8405f0"){
+                completedLessons(userID:"${context.userId}"){
                 score
                 _id
                 user{

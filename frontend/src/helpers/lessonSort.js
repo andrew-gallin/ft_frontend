@@ -22,8 +22,6 @@ exports.lessonSort = (lessonsArr, user, completedLessonArr = null) =>{
     
     if (completedLessonArr != null){
         sortedLessons.reccomended = neverCompletedLessonArrBuilder(lessonsArr, completedLessonArr)
-        console.log('newbies');
-        console.log(sortedLessons.reccomended);
         sortedLessons.keepPracticing = completedLessonArr
     }
     
@@ -33,8 +31,9 @@ exports.lessonSort = (lessonsArr, user, completedLessonArr = null) =>{
 //Takes an array of lessons and completedLessons and returns an array of lessons that have never been comepleted
 function neverCompletedLessonArrBuilder(lessonsArr, completedLessonArr){
     let newLessons = lessonsArr.filter((lesson) => {
-        return completedLessonArr.some((completedLesson) => {
-            return lesson.id === completedLesson.lesson.id
+        return !completedLessonArr.some((completedLesson) => {
+            //returns true if lesson id matches any lesson id in completedLessonArr
+            return completedLesson.lesson._id === lesson._id
         })
     })
     return newLessons
