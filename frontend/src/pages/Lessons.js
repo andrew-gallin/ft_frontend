@@ -65,14 +65,13 @@ class LessonsPage extends Component {
     try {
       let resData = await backendCall(requestBody);
       this.setState({
-        user:resData.data.user
+        user:resData.data.user == null ? null : resData.data.user
       });
     } catch (error) {
       console.log(error)
     }
     
     ///Lesson call function
-    console.log(this.state.user);
 
     try{
       let resData = await lessonGather(this.context, this.state.user); 

@@ -331,7 +331,7 @@ class SignIn extends Component {
                 {!isLogin &&
                     <FormControl margin="normal" required fullWidth>
                         <InputLabel htmlFor="confirm_password">Confirm Password</InputLabel>
-                        <Input onChange={this.handleChange()} id="confirm_password" name="confirm_password"  />
+                        <Input name="confirm_password" type="password" onChange={this.handleChange()} id="confirm_password"   />
                     </FormControl>
                 }
                 {isLogin && <FormControlLabel

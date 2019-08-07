@@ -44,7 +44,6 @@ function neverCompletedLessonArrBuilder(lessonsArr, completedLessonArr){
 function sortRecomendedLessons(lessonArr, user){
     let skill = 0
     user != null ? user.learningLanguageSkill[0] != null ? skill = user.learningLanguageSkill[0].rating : skill = 0 : skill = 0
-    console.log(skill, lessonArr);
     
     let sorted = lessonArr.sort((a,b) => {
         let aDif = Math.abs(skill - a.difficulty)
