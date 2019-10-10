@@ -99,9 +99,11 @@ class LessonForm extends Component {
             let value = data.getAll(key)
             value.length > 1 ? lesson[key] = value : lesson[key] = value[0]
         }
-        lesson.authorID = '5c324ab59a7bb9c27c3f8eda'; //TODO - convert to user token
+        lesson.authorID = this.context.userId; 
+        //Testing - 5c324ab59a7bb9c27c3f8eda
         
-        //TODO: Hit the Question API repeatedly (is there a way to just have the endpoint expect an array) and store the idValues of the newly created questions
+        //Inserts individual questions into question db, returning IDs to be referenced in Lesson object
+        //In the future, bulk upload might be desireable for better preformance
         let question_Ids = []
         for (let question of lesson.questions){
             let { prompt, answer, incorrect_answers, type} = question;
